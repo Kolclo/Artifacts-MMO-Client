@@ -1,6 +1,7 @@
 # Artifacts
 credentials.py
 python_artifacts.log
+notes.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
