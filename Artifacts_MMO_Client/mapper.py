@@ -1,3 +1,6 @@
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Hides Pygame welcome message
+
 import pygame
 from requester import APIRequester
 
@@ -19,7 +22,7 @@ class Game:
         for tile in data:
             skin = tile["skin"]
             image_path = f"Artifacts_MMO_Client/resources/{skin}.png"
-            print(image_path)
+            # print(image_path)
             images[skin] = pygame.image.load(image_path)
             images[skin] = pygame.transform.scale(images[skin], (self.tile_size, self.tile_size))
         return images
@@ -34,14 +37,14 @@ class Game:
             skin = tile["skin"]
             image = images[skin]
 
-            print(f"Tile coordinates: ({x}, {y})")
+            # print(f"Tile coordinates: ({x}, {y})")
 
             grid_x = x + 5
             grid_y = y + 5
-            print(f"Grid coordinates: ({grid_x}, {grid_y})")
+            # print(f"Grid coordinates: ({grid_x}, {grid_y})")
 
             grid[grid_y][grid_x] = image
-            print(f"Placing image {skin} at grid coordinates ({grid_x}, {grid_y})")
+            # print(f"Placing image {skin} at grid coordinates ({grid_x}, {grid_y})")
 
     def draw_grid(self, grid):
         self.window.fill((0, 0, 0))  # Clear the window
