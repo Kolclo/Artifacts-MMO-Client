@@ -22,7 +22,8 @@ setuptools.setup(
     url="https://github.com/kolclo/Artifacts-MMO-Client",
     install_requires=[
         "requests==2.32.3", 
-        "pytest==8.3.2"
+        "pytest==8.3.2",
+        "pygame==2.6.0"
         ],
     classifiers=[
         "Programming Language :: Python :: 3",
