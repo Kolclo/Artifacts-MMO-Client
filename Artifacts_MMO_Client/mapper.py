@@ -38,10 +38,18 @@ class Game:
         images = {}
         for tile in data:
             skin = tile["skin"]
-            image_path = f"Artifacts_MMO_Client/resources/{skin}.png"
-            # print(image_path)
-            images[skin] = pygame.image.load(image_path)
-            images[skin] = pygame.transform.scale(images[skin], (self.tile_size, self.tile_size))
+            # Loads the bandit lizard as file name is different to skin name
+            if skin == "forest_event_lizard1":
+                image_path = f"Artifacts_MMO_Client/resources/bandit_lizard.png"
+                skin = tile["content"]["code"]
+            else:
+                image_path = f"Artifacts_MMO_Client/resources/{skin}.png"
+
+            try:
+                images[skin] = pygame.image.load(image_path)
+                images[skin] = pygame.transform.scale(images[skin], (self.tile_size, self.tile_size))
+            except FileNotFoundError:
+                print(f"Image file '{image_path}' not found. Skipping...")
         return images
 
     def create_grid(self, width, height):
@@ -54,16 +62,15 @@ class Game:
             x = tile["x"]
             y = tile["y"]
             skin = tile["skin"]
-            image = images[skin]
 
-            # print(f"Tile coordinates: ({x}, {y})")
-
-            grid_x = x + 5
-            grid_y = y + 5
-            # print(f"Grid coordinates: ({grid_x}, {grid_y})")
-
-            grid[grid_y][grid_x] = image
-            # print(f"Placing image {skin} at grid coordinates ({grid_x}, {grid_y})")
+            # Check if the image exists in the images dictionary
+            if skin in images:
+                image = images[skin]
+                grid_x = x + 5
+                grid_y = y + 5
+                grid[grid_y][grid_x] = image
+            else:
+                print(f"Image not found for tile with skin '{skin}' at coordinates ({x}, {y})")
 
     def draw_grid(self, grid):
         # Clears window and draws the grid of tile images
