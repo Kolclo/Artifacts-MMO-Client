@@ -2,7 +2,7 @@ from credentials import api_token
 import requests
 
 
-class APIRequester:
+class SendRequest:
     def __init__(self, requests_module: requests = requests) -> None:
         self.requests_module: requests = requests_module
         self.url = "https://api.artifactsmmo.com/"
@@ -18,7 +18,7 @@ class APIRequester:
             headers=self.headers,
             params=params
         )
-        
+
         return response.json()
 
     def post(self, endpoint: str, data: dict[str, str]) -> dict[str, str]:

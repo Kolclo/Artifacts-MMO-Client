@@ -2,7 +2,7 @@ import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Hides Pygame welcome message
 
 import pygame
-from requester import APIRequester
+from requester import SendRequest
 
 class Character:
     def __init__(self, x, y):
@@ -106,7 +106,7 @@ class Game:
 
     def run(self):
         # Main Pygame loop
-        requester = APIRequester()
+        requester = SendRequest()
         data = []
         page = 1
         while True:

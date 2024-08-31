@@ -12,7 +12,7 @@ class CharacterController:
         self.pygame_window = pygame.display.set_mode((800, 600))
         self.clock = pygame.time.Clock()
         self.character_location = None
-        self.requester = requester.APIRequester()
+        self.requester = requester.SendRequest()
 
     def handle_pygame_events(self):
         for event in pygame.event.get():
