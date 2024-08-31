@@ -15,7 +15,8 @@ def character_selection():
     WIDTH, HEIGHT = 800, 800
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
-    FONT_SIZE = 24
+    FONT_SIZE = 48
+    FONT_MACONDO_LOCATION = "Artifacts_MMO_Client/resources/Macondo-Regular.ttf"
 
     # Set up the display
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -41,7 +42,7 @@ def character_selection():
         character_list.append(character_data)
 
     # Set up the font
-    font = pygame.font.SysFont("Arial", FONT_SIZE)
+    font = pygame.font.Font(FONT_MACONDO_LOCATION, FONT_SIZE)
 
     # Calculate the spacing between buttons
     num_buttons = len(character_list)
@@ -62,7 +63,7 @@ def character_selection():
         # Load the character image
         image_name = character["skin"]
         image = pygame.image.load(f"Artifacts_MMO_Client/resources/{image_name}.png")
-        image = pygame.transform.scale(image, (100, 100))
+        image = pygame.transform.scale(image, (100, 121))
         images.append(image)
 
         # Create a rect for the image
@@ -104,8 +105,17 @@ def character_selection():
 
         # Draw the character buttons
         for i, (button, image, image_rect, scale, velocity) in enumerate(zip(buttons, images, image_rects, scales, velocities)):
-            pygame.draw.rect(screen, BLACK, button)
-            text = font.render(character_list[i]["name"], True, WHITE)
+            # Create a surface with a transparent background
+            circle_surface = pygame.Surface((200, 200), pygame.SRCALPHA)
+            circle_surface.fill((0, 0, 0, 0))  # Fill with transparent color
+
+            # Draw a circle on the surface
+            pygame.draw.circle(circle_surface, (255, 255, 255, 128), (100, 100), 100)
+
+            # Blit the circle surface onto the screen
+            screen.blit(circle_surface, (button.centerx - 100, button.centery - 150))
+
+            text = font.render(character_list[i]["name"], True, BLACK)
             text_rect = text.get_rect(center=button.center)
             screen.blit(text, text_rect)
 
@@ -123,7 +133,7 @@ def character_selection():
                 velocities[i] = 0.01  # Reset the velocity to the initial value
 
             # Draw the character image with the updated scale
-            scaled_image = pygame.transform.scale(image, (int(100 * scale), int(100 * scale)))
+            scaled_image = pygame.transform.scale(image, (int(100 * scale), int(121 * scale)))
             scaled_image_rect = scaled_image.get_rect(center=image_rect.center)
             screen.blit(scaled_image, scaled_image_rect)
 
