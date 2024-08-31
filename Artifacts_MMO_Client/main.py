@@ -1,7 +1,6 @@
 from character_chooser import character_selection
 from controller import CharacterController
 from mapper import Game
-import pygame
 import sys
 
 def main():
