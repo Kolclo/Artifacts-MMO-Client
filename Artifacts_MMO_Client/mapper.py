@@ -32,6 +32,7 @@ class Game:
         # Starts Pygame
         pygame.init()
         self.window = pygame.display.set_mode((self.window_width, self.window_height))
+        pygame.display.set_caption("ArtifactsMMO - World")
 
     def load_images(self, data):
         # Loads and scales each tiles resources

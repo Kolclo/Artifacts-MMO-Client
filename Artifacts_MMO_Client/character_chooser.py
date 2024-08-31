@@ -20,7 +20,9 @@ def character_selection():
 
     # Set up the display
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Character Selection")
+    pygame.display.set_caption("ArtifactsMMO - Character Selection")
+    icon = pygame.image.load("Artifacts_MMO_Client/resources/icon1.png")
+    pygame.display.set_icon(icon)
 
     # Load the background image
     background_image = pygame.image.load("Artifacts_MMO_Client/resources/character_selection.png")
