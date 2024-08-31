@@ -23,11 +23,12 @@ def character_selection():
     pygame.display.set_caption("Character Selection")
 
     # Load the background image
-    background_image = pygame.image.load("Artifacts_MMO_Client/resources/forest_village3.png")
-    background_image = pygame.transform.scale(background_image, (WIDTH, HEIGHT))
+    background_image = pygame.image.load("Artifacts_MMO_Client/resources/character_selection.png")
+    background_image = pygame.transform.scale(background_image, (WIDTH * 1.5, HEIGHT * 1.5))
 
     # Set the initial position of the background image
     background_x = 0
+    background_y = 0
     
     pygame.transform.scale(background_image, (WIDTH, HEIGHT))
 
@@ -94,14 +95,26 @@ def character_selection():
                         selected_character = character_list[i]
                         return selected_character
 
-        # Draw the background
-        screen.blit(background_image, (background_x, 0))
-        screen.blit(background_image, (background_x + WIDTH, 0))  # Draw the background image again, offset by the width of the screen
+        # Create a larger background surface
+        background_surface = pygame.Surface((WIDTH * 2, HEIGHT * 4))  # Increased height to accommodate two screens
+
+        # Draw the background image onto the surface
+        for i in range(2):
+            for j in range(4):  # Increased range to draw two screens
+                background_surface.blit(background_image, (background_x + (i * WIDTH * 1.5), background_y + (j * HEIGHT * 1.5)))
+
+        # Draw the background surface onto the screen
+        screen.blit(background_surface, (0, 0))  # Draw at (0, 0) to avoid offsetting the background
 
         # Update the position of the background image
-        background_x -= 1
-        if background_x < -WIDTH:
-            background_x = 0
+        background_x -= 1  # Update x-position to scroll horizontally
+        background_y -= 1  # Update y-position to scroll vertically
+
+        # Check if the background has scrolled two screens
+        if background_y < -HEIGHT * 2:
+            background_y = -400  # Reset y-position to the top of the first screen
+        if background_x < -WIDTH * 2:
+            background_x = -400  # Reset x-position to the left of the first screen
 
         # Draw the character buttons
         for i, (button, image, image_rect, scale, velocity) in enumerate(zip(buttons, images, image_rects, scales, velocities)):

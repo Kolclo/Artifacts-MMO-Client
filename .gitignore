@@ -3,6 +3,8 @@ credentials.py
 python_artifacts.log
 notes.txt
 
+*.psd
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
