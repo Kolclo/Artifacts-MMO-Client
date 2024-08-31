@@ -2,7 +2,7 @@ import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Hides Pygame welcome message
 
 import pygame
-from requester import SendRequest
+from api_actions import get
 
 class Character:
     def __init__(self, x, y):
@@ -106,19 +106,12 @@ class Game:
 
     def run(self):
         # Main Pygame loop
-        requester = SendRequest()
-        data = []
-        page = 1
-        while True:
-            response = requester.get("maps", params={"size": 100, "page": page})
-            if not response["data"]:
-                break
-            data.extend(response["data"])
-            page += 1
+        get_request = get()
+        map_data = get_request.all_maps()
 
-        images = self.load_images(data)
+        images = self.load_images(map_data)
         grid = self.create_grid(self.map_tile_length, self.map_tile_height)
-        self.map_tiles_to_images(data, images, grid)
+        self.map_tiles_to_images(map_data, images, grid)
 
         running = True
         while running:

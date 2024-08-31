@@ -10,6 +10,7 @@ class CharacterController:
         self.character_name = character_name
         self.endpoint = f"my/{character_name}/action/move"
         self.pygame_window = pygame.display.set_mode((800, 600))
+        pygame.font.init()
         self.clock = pygame.time.Clock()
         self.character_location = None
         self.requester = requester.SendRequest()

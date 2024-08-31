@@ -3,7 +3,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Hides Pygame welcome message
 
 import pygame
 import sys
-from requester import SendRequest
+from api_actions import get
 
 def character_selection():
     """
@@ -12,7 +12,7 @@ def character_selection():
     pygame.init()
 
     # Set up some constants
-    WIDTH, HEIGHT = 800, 800
+    WIDTH, HEIGHT = 1200, 1200
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
     FONT_SIZE = 48
@@ -35,9 +35,9 @@ def character_selection():
     pygame.transform.scale(background_image, (WIDTH, HEIGHT))
 
     # Get the list of characters from the API
-    api_requester = SendRequest()
-    response = api_requester.get("/my/characters")
-    characters = response["data"]
+    get_request = get()
+    characters = get_request.characters()
+    print(characters)
 
     # Since 'data' is a list of characters, we need to iterate over it
     character_list = []
@@ -64,7 +64,7 @@ def character_selection():
         buttons.append(button)
 
         # Load the character image
-        image_name = character["skin"]
+        image_name = character.skin
         image = pygame.image.load(f"Artifacts_MMO_Client/resources/{image_name}.png")
         image = pygame.transform.scale(image, (100, 121))
         images.append(image)
@@ -79,7 +79,7 @@ def character_selection():
 
     # Load and play the background music
     pygame.mixer.init()
-    background_music = pygame.mixer.Sound("Artifacts_MMO_Client/resources/character_selection.wav")
+    background_music = pygame.mixer.Sound("Artifacts_MMO_Client/resources/music/character_selection2.wav")
     background_music.set_volume(0.5)  # Set the volume to 50%
     background_music.play(-1)  # Play the music in a loop
 
@@ -109,14 +109,14 @@ def character_selection():
         screen.blit(background_surface, (0, 0))  # Draw at (0, 0) to avoid offsetting the background
 
         # Update the position of the background image
-        background_x -= 1  # Update x-position to scroll horizontally
+        background_x -= 1.5  # Update x-position to scroll horizontally
         background_y -= 1  # Update y-position to scroll vertically
 
         # Check if the background has scrolled two screens
         if background_y < -HEIGHT * 2:
-            background_y = -400  # Reset y-position to the top of the first screen
+            background_y = -600  # Reset y-position to the top of the first screen
         if background_x < -WIDTH * 2:
-            background_x = -400  # Reset x-position to the left of the first screen
+            background_x = -600  # Reset x-position to the left of the first screen
 
         # Draw the character buttons
         for i, (button, image, image_rect, scale, velocity) in enumerate(zip(buttons, images, image_rects, scales, velocities)):
@@ -130,7 +130,7 @@ def character_selection():
             # Blit the circle surface onto the screen
             screen.blit(circle_surface, (button.centerx - 100, button.centery - 150))
 
-            text = font.render(character_list[i]["name"], True, BLACK)
+            text = font.render(character_list[i].name, True, BLACK)
             text_rect = text.get_rect(center=button.center)
             screen.blit(text, text_rect)
 
