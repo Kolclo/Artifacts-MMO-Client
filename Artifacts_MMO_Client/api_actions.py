@@ -28,6 +28,10 @@ class NoCharactersExistError(Exception):
     def __init__(self) -> None:
         super().__init__("No characters currently exist")
 
+class MoveCharacterError(Exception):
+    def __init__(self) -> None:
+        super().__init__("Failed to move character due to an error")
+
 
 # Get Actions
 class get:
@@ -80,3 +84,32 @@ class get:
         self.__error_handler(response, NoCharactersExistError)
         characters: list[Character] = [Character(character_data) for character_data in response["data"]]
         return characters
+    
+    def character(self, character_name: str) -> Character:
+        response: dict[str, str | int | list[dict[str, str | int]]] = self.send_request.get(f"/characters/{character_name}", params={"name": {character_name}})
+        self.__error_handler(response, NoCharactersExistError)
+        return Character(response["data"])
+
+class post:
+    def __init__(self, request_client: SendRequest = SendRequest()) -> None:
+        self.send_request: SendRequest = request_client
+
+    def __error_handler(self, response: dict[str, str], exception_handler: Exception) -> None:
+        if "error" in response:
+            print(f"Failed to do action due to error {response['error']['message']}")
+            raise exception_handler()
+        
+    
+    def move_character(self, character_name: str, position_x: int, position_y: int):
+        data = {"x": position_x, "y": position_y}
+        response: dict[str, dict[str, str | int | list[dict[str, str | int]]]] = self.send_request.post(f"/my/{character_name}/action/move", data)
+        self.__error_handler(response, MoveCharacterError)
+        character_data = response["data"]["character"]
+        character: Character = Character(character_data)
+        return character
+
+
+if __name__ == "__main__":
+    character_name = "Kieran"
+    send_post = post()
+    send_post.move_character("Kieran", 1, 0)

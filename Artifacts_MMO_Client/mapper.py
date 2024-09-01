@@ -5,10 +5,10 @@ import pygame
 from api_actions import get
 
 class Character:
-    def __init__(self, x, y):
+    def __init__(self, x, y, skin):
         self.x = x
         self.y = y
-        self.sprite = pygame.image.load("Artifacts_MMO_Client/resources/men2.png")
+        self.sprite = pygame.image.load(f"Artifacts_MMO_Client/resources/{skin}.png")
         self.sprite = pygame.transform.scale(self.sprite, (40, 50))
 
     def draw(self, window):
@@ -19,14 +19,14 @@ class Character:
         window.blit(self.sprite, (self.x * 65 + offset_x, self.y * 65 + offset_y))
 
 class Game:
-    def __init__(self):
+    def __init__(self, character_data):
         self.map_tile_length = 17
         self.map_tile_height = 21
         self.tile_size = 65
         self.window_width = self.map_tile_length * self.tile_size
         self.window_height = self.map_tile_height * self.tile_size
         self.pygame_init()
-        self.character = Character(5, 5)  # Character's starting position
+        self.character = Character((character_data.x + 5), (character_data.y + 5), character_data.skin)  # Character's starting position
 
     def pygame_init(self):
         # Starts Pygame

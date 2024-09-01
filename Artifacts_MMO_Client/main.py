@@ -17,10 +17,12 @@ def main():
 
     # Initiates character selection menu
     selected_character = character_selection()
-    # print(f"Selected character: {selected_character['name']}")
+
+    # Gets chosen character's data
+    character_data = get_request.character(selected_character.name)
 
     if selected_character:
-        game = Game()
+        game = Game(character_data)
         game.run()
 
         # Create a new CharacterController instance with the selected character's name

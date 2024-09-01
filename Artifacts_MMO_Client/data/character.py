@@ -84,7 +84,7 @@ class Character:
         ]
 
     def __repr__(self):
-        return f"Character(name={self.name}, level={self.level}, hp={self.hp}, location=({self.x}, {self.y}))"
+        return f"Character(name={self.name}, level={self.level}, hp={self.hp}, location=({self.x}, {self.y}), skin={self.skin})"
 
     def is_cooldown_active(self) -> str:
         current_time = datetime.now()
