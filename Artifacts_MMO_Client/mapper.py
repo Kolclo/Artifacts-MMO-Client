@@ -41,12 +41,7 @@ class Game:
         images = {}
         for tile in data:
             skin = tile["skin"]
-            # Loads the bandit lizard as file name is different to skin name
-            if skin == "forest_event_lizard1":
-                image_path = f"Artifacts_MMO_Client/resources/bandit_lizard.png"
-                skin = tile["content"]["code"]
-            else:
-                image_path = f"Artifacts_MMO_Client/resources/{skin}.png"
+            image_path = f"Artifacts_MMO_Client/resources/{skin}.png"
 
             try:
                 images[skin] = pygame.image.load(image_path)
