@@ -34,6 +34,7 @@ You're good to play!
 ### Actions
 Add support for more actions using APIs
 - [ ] Display cooldown for actions on screen
+- [ ] Move control ability to mapper instead of it's own window
 
 #### Movement
 - [ ] Movement

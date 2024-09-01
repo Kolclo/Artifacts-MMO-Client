@@ -120,5 +120,7 @@ class Game:
         pygame.quit()
 
 if __name__ == "__main__":
-    game = Game()
+    get_request = get()
+    character_data = get_request.character("Kieran")
+    game = Game(character_data)
     game.run()
