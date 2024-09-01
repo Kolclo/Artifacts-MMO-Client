@@ -2,13 +2,13 @@
 This client can be used to play the [Artifacts MMO](https://artifactsmmo.com/).
 
 ## Usage
-Requires Python 3.10.11 (others may work but this is what I'm using)
+Requires `Python 3.10.11` (others may work but this is what I'm using)
 
-### CLone the package
+### Clone the package
 ```git clone https://github.com/Kolclo/Artifacts-MMO-Client.git```
 
 ### Set up venv
-cd into the package and use the following to create and activate the venv (Windows):
+`cd` into the package and use the following to create and activate the venv (Windows):
 
 ```bash
 python -m venv .venv 
@@ -24,7 +24,7 @@ Create a new file called `credentials.py` in `/Artifacts-MMO-Client/Artifacts_MM
 api_token: dict[str, str] = {"token": "PUT TOKEN HERE"}
 ```
 
-Sign up to [Artifacts MMO](https://artifactsmmo.com/) and get your API key, then paste it inside the credentials file
+Sign up to [Artifacts MMO](https://artifactsmmo.com/) to get your API key, then paste it inside the credentials file
 
 You're good to play!
 
@@ -35,29 +35,34 @@ You're good to play!
 Add support for more actions using APIs
 - [ ] Display cooldown for actions on screen
 
+#### Movement
 - [ ] Movement
 - [ ] Create corresponding API actions
 - [ ] Error handling
 
+#### Combat
 - [ ] Combat
 - [ ] Create corresponding API actions
 - [ ] Error handling
 
+#### Gathering
 - [ ] Gathering
 - [ ] Create corresponding API actions
 - [ ] Error handling
 
+#### Crafting
 - [ ] Crafting
 - [ ] Create corresponding API actions
 - [ ] Error handling
+
 (and more once these are done)
 
 ### Map
 Render an interactive and dynamic map
-- [ x ] Support for map rendering
-- [ x ] Dynamic updates to map using API
+- [x] Support for map rendering
+- [x] Dynamic updates to map using API
 - [ ] Support for map zooming?
-- [ x ] Show character sprite on top of map
+- [x] Show character sprite on top of map
 - [ ] Show character sprite in correct server-side location + potential caching
 - [ ] Display correct character sprite depending on current character in use
 - [ ] Ability to request new resources when they're not found locally
@@ -85,9 +90,9 @@ Improve performance of client
 
 ### Character Selection
 Prompt user to select a character to control
-- [ x ] Create custom background
-- [ x ] Display background and animate it's movement
-- [ x ] Create custom music
-- [ x ] Get a list of characters from API
-- [ x ] Display character list to user
-- [ x ] Allow for character selection
+- [x] Create custom background
+- [x] Display background and animate it's movement
+- [x] Create custom music
+- [x] Get a list of characters from API
+- [x] Display character list to user
+- [x] Allow for character selection
