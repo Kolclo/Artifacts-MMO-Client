@@ -1,83 +1,72 @@
-import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Hides Pygame welcome message
-
-import pygame
-import sys
 from api_actions import Get, Post
+
+class Vector2:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __repr__(self):
+        return f"Vector2({self.x}, {self.y})"
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def __add__(self, other):
+        return Vector2(self.x + other.x, self.y + other.y)
+
+    def __sub__(self, other):
+        return Vector2(self.x - other.x, self.y - other.y)
 
 class CharacterController:
     def __init__(self, character_name):
         self.character_name = character_name
         self.endpoint = f"my/{character_name}/action/move"
-        self.pygame_window = pygame.display.set_mode((800, 600))
-        pygame.font.init()
-        self.clock = pygame.time.Clock()
         self.character_location = None
+        
         self.get_request = Get()
         self.post_request = Post()
 
-    def handle_pygame_events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+        self.UP = Vector2(0, -1)
+        self.DOWN = Vector2(0, 1)
+        self.LEFT = Vector2(-1, 0)
+        self.RIGHT = Vector2(1, 0)
 
-    def draw_pygame_window(self):
-        # print("draw pygame window")
-        self.pygame_window.fill((0, 0, 0))
-        # Draw WASD key layout - temp
-        font = pygame.font.SysFont("Arial", 38)
-        w_key = font.render("W", True, (255, 255, 255))
-        a_key = font.render("A", True, (255, 255, 255))
-        s_key = font.render("S", True, (255, 255, 255))
-        d_key = font.render("D", True, (255, 255, 255))
-        self.pygame_window.blit(w_key, (375, 275))
-        self.pygame_window.blit(a_key, (325, 325))
-        self.pygame_window.blit(s_key, (375, 325))
-        self.pygame_window.blit(d_key, (425, 325))
-        # Draw other game elements here
-        pygame.display.flip()
-
-    def move_character(self, x, y):
-        response = self.post_request.move_character(self.character_name, x, y)
-        new_location = {"x": response.x, "y": response.y}
+    def move_character(self, location):
+        response = self.post_request.move_character(self.character_name, location.x, location.y)
+        new_location = Vector2(response.x, response.y)
         self.character_location = new_location
-        print(f"Character moved to ({new_location['x']}, {new_location['y']})")
+        print(f"Character moved to ({new_location.x}, {new_location.y})")
         return new_location
 
     def get_character_location(self):
         response = self.get_request.character(self.character_name)
-        self.character_location = {"x": response.x, "y": response.y}
+        self.character_location = Vector2(response.x, response.y)
         return self.character_location
 
-    def run(self):
-        self.character_location = self.get_character_location()
+    def move_up(self):
         if self.character_location is None:
-            return
+            self.character_location = self.get_character_location()
+        new_location = self.move_character(self.character_location + self.UP)
+        if new_location:
+            self.character_location = new_location
 
-        while True:
-            self.handle_pygame_events()
-            self.draw_pygame_window()
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_w]:
-                new_location = self.move_character(self.character_location["x"], self.character_location["y"] - 1)
-                if new_location:
-                    self.character_location = new_location
-            elif keys[pygame.K_s]:
-                new_location = self.move_character(self.character_location["x"], self.character_location["y"] + 1)
-                if new_location:
-                    self.character_location = new_location
-            elif keys[pygame.K_a]:
-                new_location = self.move_character(self.character_location["x"] - 1, self.character_location["y"])
-                if new_location:
-                    self.character_location = new_location
-            elif keys[pygame.K_d]:
-                new_location = self.move_character(self.character_location["x"] + 1, self.character_location["y"])
-                if new_location:
-                    self.character_location = new_location
-            self.clock.tick(60)
+    def move_down(self):
+        if self.character_location is None:
+            self.character_location = self.get_character_location()
+        new_location = self.move_character(self.character_location + self.DOWN)
+        if new_location:
+            self.character_location = new_location
 
-if __name__ == "__main__":
-    character_name = "Kieran"
-    controller = CharacterController(character_name)
-    controller.run()
+    def move_left(self):
+        if self.character_location is None:
+            self.character_location = self.get_character_location()
+        new_location = self.move_character(self.character_location + self.LEFT)
+        if new_location:
+            self.character_location = new_location
+
+    def move_right(self):
+        if self.character_location is None:
+            self.character_location = self.get_character_location()
+        new_location = self.move_character(self.character_location + self.RIGHT)
+        if new_location:
+            self.character_location = new_location

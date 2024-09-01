@@ -3,6 +3,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Hides Pygame welcome message
 
 import pygame
 from api_actions import Get
+from controller import CharacterController
 
 class Character:
     def __init__(self, x, y, skin):
@@ -27,6 +28,7 @@ class Game:
         self.window_height = self.map_tile_height * self.tile_size
         self.pygame_init()
         self.character = Character((character_data.x + 5), (character_data.y + 5), character_data.skin)  # Character's starting position
+        self.controller = CharacterController(character_data.name)
 
     def pygame_init(self):
         # Starts Pygame
@@ -89,12 +91,16 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     self.character.x -= 1
+                    self.controller.move_left()
                 elif event.key == pygame.K_RIGHT:
                     self.character.x += 1
+                    self.controller.move_right()
                 elif event.key == pygame.K_UP:
                     self.character.y -= 1
+                    self.controller.move_up()
                 elif event.key == pygame.K_DOWN:
                     self.character.y += 1
+                    self.controller.move_down()
 
                 # Stops character from leaving the map
                 self.character.x = max(0, min(self.character.x, self.map_tile_length - 1))

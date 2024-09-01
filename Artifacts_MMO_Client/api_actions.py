@@ -3,6 +3,7 @@ from data.monster import Monster
 from data.resource import Resource
 from data.character import Character
 from data.map import Map
+import time
 
 
 # Custom Errors
@@ -30,7 +31,11 @@ class NoCharactersExistError(Exception):
 
 class MoveCharacterError(Exception):
     def __init__(self) -> None:
-        super().__init__("Failed to move character due to an error")
+        super().__init__(f"Failed to move character due to an error")
+
+class FightError(Exception):
+    def __init__(self) -> None:
+        super().__init__("Failed to fight due to an error")
 
 
 # Get Actions
@@ -99,17 +104,84 @@ class Post:
             print(f"Failed to do action due to error {response['error']['message']}")
             raise exception_handler()
         
-    
+
+    # Primary Actions
     def move_character(self, character_name: str, position_x: int, position_y: int):
-        data = {"x": position_x, "y": position_y}
-        response: dict[str, dict[str, str | int | list[dict[str, str | int]]]] = self.send_request.post(f"/my/{character_name}/action/move", data)
-        self.__error_handler(response, MoveCharacterError)
+        max_retries = 3
+        retries = 0
+        while retries < max_retries:
+            try:
+                data = {"x": position_x, "y": position_y}
+                response: dict[str, dict[str, str | int | list[dict[str, str | int]]]] = self.send_request.post(f"/my/{character_name}/action/move", data)
+                self.__error_handler(response, MoveCharacterError)
+                character_data = response["data"]["character"]
+                character: Character = Character(character_data)
+                return character
+            except MoveCharacterError as e:
+                print(f"Error moving character: {e}")
+                retries += 1
+                # Wait for 5 seconds before trying to move again
+                time.sleep(5)
+        else:
+            print("Failed to move character after {} retries".format(max_retries))
+            raise MoveCharacterError
+    
+    def fight(self, character_name: str):
+        response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/fight", params={"name": character_name})
+        self.__error_handler(response, FightError)
         character_data = response["data"]["character"]
         character: Character = Character(character_data)
         return character
+
+    def gather(self):
+        pass
+
+    def craft(self):
+        pass
+
+    def equip(self):
+        pass
+
+    def unequip(self):
+        pass
+    
+
+    # Task-related
+    def accept_task(self):
+        pass
+
+    def complete_task(self):
+        pass
+
+    def cancel_task(self):
+        pass
+
+
+    # Bank-related
+    def deposit_item(self):
+        pass
+
+    def deposit_gold(self):
+        pass
+
+    def withdraw_item(self):
+        pass
+
+    def withdraw_money(self):
+        pass
+
+    def buy_item(self):
+        pass
+
+    def sell_item(self):
+        pass
+
+    def buy_expansion(self):
+        pass
 
 
 if __name__ == "__main__":
     character_name = "Kieran"
     send_post = Post()
-    send_post.move_character("Kieran", 1, 0)
+    # send_post.move_character("Kieran", 1, 0)
+    send_post.fight(character_name)
