@@ -63,8 +63,9 @@ Render an interactive and dynamic map
 - [x] Dynamic updates to map using API
 - [ ] Support for map zooming?
 - [x] Show character sprite on top of map
-- [ ] Show character sprite in correct server-side location + potential caching
-- [ ] Display correct character sprite depending on current character in use
+- [ ] Show character sprite in correct server-side location + potential caching (half done)
+- [ ] Only move character sprite client-side if the character has moved server-side
+- [x] Display correct character sprite depending on current character in use
 - [ ] Ability to request new resources when they're not found locally
 - [ ] Display name of the location you're hovering over in corner
 - [ ] Display current location name in corner or near map
