@@ -2,8 +2,8 @@ import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Hides Pygame welcome message
 
 import pygame
-import requester
 import sys
+from api_actions import Get, Post
 
 class CharacterController:
     def __init__(self, character_name):
@@ -13,7 +13,8 @@ class CharacterController:
         pygame.font.init()
         self.clock = pygame.time.Clock()
         self.character_location = None
-        self.requester = requester.SendRequest()
+        self.get_request = Get()
+        self.post_request = Post()
 
     def handle_pygame_events(self):
         for event in pygame.event.get():
@@ -38,35 +39,20 @@ class CharacterController:
         pygame.display.flip()
 
     def move_character(self, x, y):
-        # print("moving character")
-        data = {"x": x, "y": y}
-        response = self.requester.post(self.endpoint, data)
-        if "error" not in response:
-            new_location = response["data"]["destination"]
-            self.character_location = new_location
-            print(f"Character moved to ({new_location['x']}, {new_location['y']})")
-            return new_location
-        else:
-            print(f"Error moving character: {response['error']}")
-            return None
+        response = self.post_request.move_character(self.character_name, x, y)
+        new_location = {"x": response.x, "y": response.y}
+        self.character_location = new_location
+        print(f"Character moved to ({new_location['x']}, {new_location['y']})")
+        return new_location
 
     def get_character_location(self):
-        # print("getting location")
-        endpoint = f"characters/{self.character_name}"
-        response = self.requester.get(endpoint)
-        if "error" not in response:
-            print("no error")
-            self.character_location = {"x": response["data"]["x"], 
-                                       "y": response["data"]["y"]}
-            return self.character_location
-        else:
-            print(f"Error getting character location: {response['error']}")
-            return None
+        response = self.get_request.character(self.character_name)
+        self.character_location = {"x": response.x, "y": response.y}
+        return self.character_location
 
     def run(self):
         self.character_location = self.get_character_location()
         if self.character_location is None:
-            # print("Failed to get character location")
             return
 
         while True:

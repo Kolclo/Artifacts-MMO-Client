@@ -2,7 +2,7 @@ import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Hides Pygame welcome message
 
 import pygame
-from api_actions import get
+from api_actions import Get
 
 class Character:
     def __init__(self, x, y, skin):
@@ -103,7 +103,7 @@ class Game:
 
     def run(self):
         # Main Pygame loop
-        get_request = get()
+        get_request = Get()
         map_data = get_request.all_maps()
 
         images = self.load_images(map_data)
@@ -120,7 +120,7 @@ class Game:
         pygame.quit()
 
 if __name__ == "__main__":
-    get_request = get()
+    get_request = Get()
     character_data = get_request.character("Kieran")
     game = Game(character_data)
     game.run()

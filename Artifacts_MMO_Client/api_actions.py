@@ -34,7 +34,7 @@ class MoveCharacterError(Exception):
 
 
 # Get Actions
-class get:
+class Get:
     def __init__(self, request_client: SendRequest = SendRequest()) -> None:
         self.send_request: SendRequest = request_client
 
@@ -90,7 +90,7 @@ class get:
         self.__error_handler(response, NoCharactersExistError)
         return Character(response["data"])
 
-class post:
+class Post:
     def __init__(self, request_client: SendRequest = SendRequest()) -> None:
         self.send_request: SendRequest = request_client
 
@@ -111,5 +111,5 @@ class post:
 
 if __name__ == "__main__":
     character_name = "Kieran"
-    send_post = post()
+    send_post = Post()
     send_post.move_character("Kieran", 1, 0)

@@ -3,7 +3,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Hides Pygame welcome message
 
 import pygame
 import sys
-from api_actions import get
+from api_actions import Get
 
 def character_selection():
     """
@@ -35,7 +35,7 @@ def character_selection():
     pygame.transform.scale(background_image, (WIDTH, HEIGHT))
 
     # Get the list of characters from the API
-    get_request = get()
+    get_request = Get()
     characters = get_request.characters()
     print(characters)
 

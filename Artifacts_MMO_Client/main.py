@@ -1,12 +1,12 @@
 from character_chooser import character_selection
 from controller import CharacterController
 from mapper import Game
-from api_actions import get
+from api_actions import Get
 import sys
 
 def main():
     # Sets up requests for later use
-    get_request = get()
+    get_request = Get()
 
     # Checks whether server is online
     server_status = get_request.server_status()
