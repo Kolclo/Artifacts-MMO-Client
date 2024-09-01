@@ -79,7 +79,7 @@ def character_selection():
 
     # Load and play the background music
     pygame.mixer.init()
-    background_music = pygame.mixer.Sound("Artifacts_MMO_Client/resources/music/character_selection2.wav")
+    background_music = pygame.mixer.Sound("Artifacts_MMO_Client/resources/music/character_selection1.wav")
     background_music.set_volume(0.5)  # Set the volume to 50%
     background_music.play(-1)  # Play the music in a loop
 

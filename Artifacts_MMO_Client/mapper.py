@@ -34,6 +34,8 @@ class Game:
         self.window = pygame.display.set_mode((self.window_width, self.window_height))
         pygame.display.set_caption("ArtifactsMMO - World")
 
+    # Take a look at event lizard!!
+    #IMPORTANT
     def load_images(self, data):
         # Loads and scales each tiles resources
         images = {}
