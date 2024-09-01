@@ -68,6 +68,31 @@ Render an interactive and dynamic map
 - [ ] Ability to request new resources when they're not found locally
 - [ ] Display name of the location you're hovering over in corner
 - [ ] Display current location name in corner or near map
-- [ ] Display cooldown for actions on screen
-- [ ] Multithreading probably...quantum computers
-- [ ] Make code more modular
+- [ ] Add pins to map?
+
+### Inventory
+Add support for inventory usage/management
+- [ ] Access to inventory
+- [ ] Inventory UI system
+
+### Code Quality
+Improve code consistency and efficiency
+- [ ] Use typing for function parameters and return types
+- [ ] Use more functions to make code more modular
+- [ ] Consistent naming conventions throughout the code
+- [ ] Remove hardcoded interactions with requester module and instead use api_actions
+
+### Performance
+Improve performance of client
+- [ ] Multithreading?
+- [ ] Option to play exclusively via terminal?
+
+
+### Character Selection
+Prompt user to select a character to control
+- [x] Create custom background
+- [x] Display background and animate it's movement
+- [x] Create custom music
+- [x] Get a list of characters from API
+- [x] Display character list to user
+- [x] Allow for character selection
