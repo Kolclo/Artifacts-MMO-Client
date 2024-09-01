@@ -1,4 +1,4 @@
-from character_chooser import character_selection
+from Artifacts_MMO_Client.character_selection import character_selection
 from controller import CharacterController
 from mapper import Game
 from api_actions import Get
