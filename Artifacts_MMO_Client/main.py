@@ -25,11 +25,6 @@ def main():
         game = Game(character_data)
         game.run()
 
-        # Create a new CharacterController instance with the selected character's name
-        controller = CharacterController(selected_character.name)
-        controller.run()
-        print("Closing controller")
-        
         sys.exit()
 
 if __name__ == "__main__":

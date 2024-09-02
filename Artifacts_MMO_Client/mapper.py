@@ -29,6 +29,11 @@ class Game:
         self.pygame_init()
         self.character = Character((character_data.x + 5), (character_data.y + 5), character_data.skin)  # Character's starting position
         self.controller = CharacterController(character_data.name)
+        self.move_up = 0
+        self.move_down = 0
+        self.move_left = 0
+        self.move_right = 0
+        self.cooldown = 0
 
     def pygame_init(self):
         # Starts Pygame
@@ -36,7 +41,7 @@ class Game:
         self.window = pygame.display.set_mode((self.window_width, self.window_height))
         pygame.display.set_caption("ArtifactsMMO - World")
 
-    # Take a look at event lizard!!
+    # Take a look at event lizard!! 
     #IMPORTANT
     def load_images(self, data):
         # Loads and scales each tiles resources
@@ -81,10 +86,10 @@ class Game:
                     self.window.blit(image, (x * self.tile_size, y * self.tile_size))
         # Draws character on top of grid
         self.character.draw(self.window)
-    
+
     # Temporary until other API's and controls are coded in, handles button presses
 
-    def handle_events(self):
+    def handle_events(self, grid):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False
@@ -105,6 +110,11 @@ class Game:
                 # Stops character from leaving the map
                 self.character.x = max(0, min(self.character.x, self.map_tile_length - 1))
                 self.character.y = max(0, min(self.character.y, self.map_tile_height - 1))
+
+                # Redraw the grid after character movement
+                self.draw_grid(grid)
+                pygame.display.flip()
+
         return True
 
     def run(self):
@@ -118,7 +128,7 @@ class Game:
 
         running = True
         while running:
-            running = self.handle_events()
+            running = self.handle_events(grid)
             self.draw_grid(grid)
             pygame.display.flip()
             pygame.time.Clock().tick(60)

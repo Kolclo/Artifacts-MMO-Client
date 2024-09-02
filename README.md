@@ -73,8 +73,8 @@ Render an interactive and dynamic map
 - [ ] Display current location name in corner or near map
 - [ ] Add pins to map?
 
-Controls
-- [ ] Button press should trigger movement/action
+Controls - bugs
+- [x] Button press should trigger movement/action
 - [ ] Subsequent presses should be stored (for movement) 
 - [ ] When cooldown has ended, add total subsequent presses and move that much. (eg. 4x up, 3x left, and 1x down would move the character to the tile that is 3 up and 3 left in one move)
 
