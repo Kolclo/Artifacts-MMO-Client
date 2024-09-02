@@ -134,50 +134,116 @@ class Post:
         return character
 
     def gather(self):
+        # /my/{name}/action/gathering
+        # Must be on a resource
         pass
 
     def craft(self):
+        # /my/{name}/action/crafting
+        # Must be on a workshop tile
+
+        # {
+        # "code": "string",
+        # "quantity": 1
+        # }
+
         pass
 
     def equip(self):
+        # /my/{name}/action/equip
+
+        # {
+        # "code": "string",
+        # "slot": "weapon",
+        # "quantity": 1
+        # }
         pass
 
     def unequip(self):
+        # /my/{name}/action/unequip
+
+        # {
+        # "slot": "weapon",
+        # "quantity": 1
+        # }
         pass
     
 
     # Task-related
     def accept_task(self):
+        # /my/{name}/action/task/new
         pass
 
     def complete_task(self):
+        # /my/{name}/action/task/complete
         pass
 
     def cancel_task(self):
+        # /my/{name}/action/task/cancel
         pass
 
 
     # Bank-related
     def deposit_item(self):
+        # /my/{name}/action/bank/deposit
+
+        # {
+        # "code": "string",
+        # "quantity": 1
+        # }
+
         pass
 
     def deposit_gold(self):
+        # /my/{name}/action/bank/deposit/gold
+
+        # {
+        # "quantity": 1
+        # }
         pass
 
     def withdraw_item(self):
+        # /my/{name}/action/bank/withdraw
+
+        # {
+        # "code": "string",
+        # "quantity": 1
+        # }
         pass
 
     def withdraw_money(self):
-        pass
+        # /my/{name}/action/bank/withdraw/gold
 
-    def buy_item(self):
-        pass
-
-    def sell_item(self):
+        # {
+        # "quantity": 1
+        # }
         pass
 
     def buy_expansion(self):
+        # /my/{name}/action/bank/buy_expansion
         pass
+
+    # Exchange-related
+    def buy_item(self):
+        # /my/{name}/action/ge/buy
+
+        # {
+        # "code": "string",
+        # "quantity": 1,
+        # "price": 1
+        # }
+        pass
+
+    def sell_item(self):
+        # /my/{name}/action/ge/buy
+
+        # {
+        # "code": "string",
+        # "quantity": 1,
+        # "price": 1
+        # }
+        pass
+
 
 
 if __name__ == "__main__":
