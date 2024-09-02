@@ -84,7 +84,20 @@ class Character:
         ]
 
     def __repr__(self):
-        return f"Character(name={self.name}, level={self.level}, hp={self.hp}, location=({self.x}, {self.y}), skin={self.skin})"
+        return (
+            f"Character(name={self.name}, level={self.level}, hp={self.hp}, location=({self.x}, {self.y}), "
+            f"skin={self.skin}, weapon_slot={self.weapon_slot}, shield_slot={self.shield_slot}, "
+            f"helmet_slot={self.helmet_slot}, body_armor_slot={self.body_armor_slot}, "
+            f"leg_armor_slot={self.leg_armor_slot}, boots_slot={self.boots_slot}, "
+            f"ring1_slot={self.ring1_slot}, ring2_slot={self.ring2_slot}, "
+            f"amulet_slot={self.amulet_slot}, artifact1_slot={self.artifact1_slot}, "
+            f"artifact2_slot={self.artifact2_slot}, artifact3_slot={self.artifact3_slot}, "
+            f"consumable1_slot={self.consumable1_slot}, consumable1_slot_quantity={self.consumable1_slot_quantity}, "
+            f"consumable2_slot={self.consumable2_slot}, consumable2_slot_quantity={self.consumable2_slot_quantity}, "
+            f"task={self.task}, task_type={self.task_type}, task_progress={self.task_progress}, "
+            f"task_total={self.task_total}, inventory_max_items={self.inventory_max_items}, "
+            f"inventory={self.inventory}, inventory_slots={self.inventory_slots})"
+        )
 
     def is_cooldown_active(self) -> str:
         current_time = datetime.now()

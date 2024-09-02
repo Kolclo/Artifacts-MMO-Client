@@ -40,12 +40,13 @@ Add support for more actions using APIs
 - [x] Movement
 - [x] Create corresponding API actions
 - [ ] Improve efficiency - Add up all subsequent actions and send them all at once
+- [x] Retry movement command after cooldown period instead of every 5 secs
 - [ ] Error handling
 
 #### Combat
 - [ ] Combat
 - [x] Create corresponding API actions
-- [ ] Sync location after combat is complete
+- [x] Sync location after combat is complete
 - [ ] Error handling
 
 #### Gathering
@@ -90,6 +91,11 @@ Improve code consistency and efficiency
 - [ ] Use more functions to make code more modular - in progress
 - [x] Consistent naming conventions throughout the code
 - [x] Remove hardcoded interactions with requester module and instead use api_actions
+
+### Data
+Improve data management via centralisation of data
+- [ ] Move data into GameState class (in progress)
+- [ ] Change all current code to use new GameState class
 
 ### Performance
 Improve performance of client

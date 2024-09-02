@@ -6,10 +6,12 @@ from api_actions import Get
 from controller import CharacterController
 
 class Character:
-    def __init__(self, x, y, skin):
-        self.x = x
-        self.y = y
-        self.sprite = pygame.image.load(f"Artifacts_MMO_Client/resources/{skin}.png")
+    def __init__(self, game_state):
+        self.game_state = game_state
+        self.x = self.game_state.get_character_data().x + 5
+        self.y = self.game_state.get_character_data().y + 5
+        self.skin = self.game_state.get_character_data().skin
+        self.sprite = pygame.image.load(f"Artifacts_MMO_Client/resources/{self.skin}.png")
         self.sprite = pygame.transform.scale(self.sprite, (40, 50))
 
     def draw(self, window):
@@ -20,29 +22,29 @@ class Character:
         window.blit(self.sprite, (self.x * 65 + offset_x, self.y * 65 + offset_y))
 
 class Game:
-    def __init__(self, character_data):
+    def __init__(self, game_state):
+        self.game_state = game_state
         self.map_tile_length = 17
         self.map_tile_height = 21
         self.tile_size = 65
         self.window_width = self.map_tile_length * self.tile_size
         self.window_height = self.map_tile_height * self.tile_size
         self.pygame_init()
-        self.character = Character((character_data.x + 5), (character_data.y + 5), character_data.skin)  # Character's starting position
-        self.controller = CharacterController(character_data.name)
+        self.character = Character(game_state)
+        self.character_name = self.game_state.get_character_data().name
+        self.controller = CharacterController(self.game_state.get_character_data().name)
         self.move_up = 0
         self.move_down = 0
         self.move_left = 0
         self.move_right = 0
         self.cooldown = 0
+        self.get_request = Get()
 
     def pygame_init(self):
-        # Starts Pygame
         pygame.init()
         self.window = pygame.display.set_mode((self.window_width, self.window_height))
         pygame.display.set_caption("ArtifactsMMO - World")
 
-    # Take a look at event lizard!! 
-    #IMPORTANT
     def load_images(self, data):
         # Loads and scales each tiles resources
         images = {}
@@ -87,8 +89,6 @@ class Game:
         # Draws character on top of grid
         self.character.draw(self.window)
 
-    # Temporary until other API's and controls are coded in, handles button presses
-
     def handle_events(self, grid):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -96,18 +96,34 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     self.character.x -= 1
+                    character_data = self.game_state.get_character_data()
+                    character_data.x = self.character.x - 5
+                    self.game_state.set_character_data(character_data)
                     self.controller.move_left()
                 elif event.key == pygame.K_RIGHT:
                     self.character.x += 1
+                    character_data = self.game_state.get_character_data()
+                    character_data.x = self.character.x - 5
+                    self.game_state.set_character_data(character_data)
                     self.controller.move_right()
                 elif event.key == pygame.K_UP:
                     self.character.y -= 1
+                    character_data = self.game_state.get_character_data()
+                    character_data.y = self.character.y - 5
+                    self.game_state.set_character_data(character_data)
                     self.controller.move_up()
                 elif event.key == pygame.K_DOWN:
                     self.character.y += 1
+                    character_data = self.game_state.get_character_data()
+                    character_data.y = self.character.y - 5
+                    self.game_state.set_character_data(character_data)
                     self.controller.move_down()
                 elif event.key == pygame.K_SPACE:
                     self.controller.fight()
+                    response = self.get_request.character(self.character_name)
+                    self.character.x = response.x + 5
+                    self.character.y = response.y + 5
+                    self.draw_grid(grid)
 
                 # Stops character from leaving the map
                 self.character.x = max(0, min(self.character.x, self.map_tile_length - 1))
@@ -120,9 +136,7 @@ class Game:
         return True
 
     def run(self):
-        # Main Pygame loop
-        get_request = Get()
-        map_data = get_request.all_maps()
+        map_data = self.get_request.all_maps()
 
         images = self.load_images(map_data)
         grid = self.create_grid(self.map_tile_length, self.map_tile_height)

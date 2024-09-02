@@ -2,6 +2,7 @@ from character_selection import character_selection
 from controller import CharacterController
 from mapper import Game
 from api_actions import Get
+from game_state import GameState
 import sys
 
 def main():
@@ -19,7 +20,8 @@ def main():
     selected_character = character_selection()
 
     # Gets chosen character's data
-    character_data = get_request.character(selected_character.name)
+    response = get_request.character(selected_character.name)
+    character_data = GameState(response)
 
     if selected_character:
         game = Game(character_data)

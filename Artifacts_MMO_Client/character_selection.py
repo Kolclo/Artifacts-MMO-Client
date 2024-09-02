@@ -37,7 +37,6 @@ def character_selection():
     # Get the list of characters from the API
     get_request = Get()
     characters = get_request.characters()
-    print(characters)
 
     # Since 'data' is a list of characters, we need to iterate over it
     character_list = []

@@ -45,7 +45,7 @@ class Get:
 
     def __error_handler(self, response: dict[str, str], exception_handler: Exception) -> None:
         if "error" in response:
-            print(f"Failed to do action due to error {response['error']['message']}")
+            print(f"Failed to do action due to error: {response['error']['message']}")
             raise exception_handler()
 
 
@@ -117,11 +117,12 @@ class Post:
                 character_data = response["data"]["character"]
                 character: Character = Character(character_data)
                 return character
-            except MoveCharacterError as e:
-                print(f"Error moving character: {e}")
+            except MoveCharacterError:
                 retries += 1
-                # Wait for 5 seconds before trying to move again
-                time.sleep(5)
+                wait_period = float(response['error']['message'].split(': ')[1].split(' ')[0]) + 0.2
+                print(f"Retrying in {wait_period} seconds...")
+                # Wait for cooldown period before trying to move again
+                time.sleep(wait_period)
         else:
             print("Failed to move character after {} retries".format(max_retries))
             raise MoveCharacterError

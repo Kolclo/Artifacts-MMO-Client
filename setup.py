@@ -11,7 +11,7 @@ def read_file(fname) -> str:
 
 setuptools.setup(
     name="Artifacts-MMO-Client",
-    version="1",
+    version="1.1",
     author="kolclo",
     packages=setuptools.find_packages(),
     require_Wheel=True,
