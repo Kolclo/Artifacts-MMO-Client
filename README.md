@@ -37,13 +37,14 @@ Add support for more actions using APIs
 - [ ] Move control ability to mapper instead of it's own window
 
 #### Movement
-- [ ] Movement
-- [ ] Create corresponding API actions
+- [x] Movement
+- [x] Create corresponding API actions
+- [ ] Improve efficiency - Add up all subsequent actions and send them all at once
 - [ ] Error handling
 
 #### Combat
 - [ ] Combat
-- [ ] Create corresponding API actions
+- [x] Create corresponding API actions
 - [ ] Error handling
 
 #### Gathering
@@ -64,13 +65,18 @@ Render an interactive and dynamic map
 - [x] Dynamic updates to map using API
 - [ ] Support for map zooming?
 - [x] Show character sprite on top of map
-- [ ] Show character sprite in correct server-side location + potential caching (half done)
+- [x] Show character sprite in correct server-side location + potential caching (half done)
 - [ ] Only move character sprite client-side if the character has moved server-side
 - [x] Display correct character sprite depending on current character in use
 - [ ] Ability to request new resources when they're not found locally
 - [ ] Display name of the location you're hovering over in corner
 - [ ] Display current location name in corner or near map
 - [ ] Add pins to map?
+
+Controls
+- [ ] Button press should trigger movement/action
+- [ ] Subsequent presses should be stored (for movement) 
+- [ ] When cooldown has ended, add total subsequent presses and move that much. (eg. 4x up, 3x left, and 1x down would move the character to the tile that is 3 up and 3 left in one move)
 
 ### Inventory
 Add support for inventory usage/management
@@ -80,9 +86,9 @@ Add support for inventory usage/management
 ### Code Quality
 Improve code consistency and efficiency
 - [ ] Use typing for function parameters and return types
-- [ ] Use more functions to make code more modular
-- [ ] Consistent naming conventions throughout the code
-- [ ] Remove hardcoded interactions with requester module and instead use api_actions
+- [ ] Use more functions to make code more modular - in progress
+- [x] Consistent naming conventions throughout the code
+- [x] Remove hardcoded interactions with requester module and instead use api_actions
 
 ### Performance
 Improve performance of client
