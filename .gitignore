@@ -4,6 +4,7 @@ python_artifacts.log
 notes.txt
 
 *.psd
+*.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

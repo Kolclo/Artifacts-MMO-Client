@@ -101,6 +101,8 @@ class Game:
                 elif event.key == pygame.K_DOWN:
                     self.character.y += 1
                     self.controller.move_down()
+                elif event.key == pygame.K_SPACE:
+                    self.controller.fight()
 
                 # Stops character from leaving the map
                 self.character.x = max(0, min(self.character.x, self.map_tile_length - 1))

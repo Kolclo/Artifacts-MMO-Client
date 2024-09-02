@@ -70,3 +70,8 @@ class CharacterController:
         new_location = self.move_character(self.character_location + self.RIGHT)
         if new_location:
             self.character_location = new_location
+    
+    def fight(self):
+        response = self.post_request.fight(self.character_name)
+        print(f"Character attacked monster")
+        return response

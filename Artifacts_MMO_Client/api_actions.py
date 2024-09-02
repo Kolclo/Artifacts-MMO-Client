@@ -127,7 +127,7 @@ class Post:
             raise MoveCharacterError
     
     def fight(self, character_name: str):
-        response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/fight", params={"name": character_name})
+        response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/fight")
         self.__error_handler(response, FightError)
         character_data = response["data"]["character"]
         character: Character = Character(character_data)
