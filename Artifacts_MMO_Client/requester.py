@@ -21,7 +21,7 @@ class SendRequest:
 
         return response.json()
 
-    def post(self, endpoint: str, data: dict[str, str]) -> dict[str, str]:
+    def post(self, endpoint: str, data: dict[str, str] = {}) -> dict[str, str]:
         response: requests.Response = self.requests_module.post(
             f"{self.url}{endpoint}", 
             headers=self.headers, 

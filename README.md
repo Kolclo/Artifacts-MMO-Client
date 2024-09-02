@@ -45,6 +45,7 @@ Add support for more actions using APIs
 #### Combat
 - [ ] Combat
 - [x] Create corresponding API actions
+- [ ] Sync location after combat is complete
 - [ ] Error handling
 
 #### Gathering
