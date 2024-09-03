@@ -32,7 +32,7 @@ class Game:
         self.pygame_init()
         self.character = Character(game_state)
         self.character_name = self.game_state.get_character_data().name
-        self.controller = CharacterController(self.game_state.get_character_data().name)
+        self.controller = CharacterController(game_state)
         self.move_up = 0
         self.move_down = 0
         self.move_left = 0
@@ -119,7 +119,8 @@ class Game:
                     self.game_state.set_character_data(character_data)
                     self.controller.move_down()
                 elif event.key == pygame.K_SPACE:
-                    self.controller.fight()
+                    # self.controller.fight()
+                    self.controller.perform_action()
                     response = self.get_request.character(self.character_name)
                     self.character.x = response.x + 5
                     self.character.y = response.y + 5

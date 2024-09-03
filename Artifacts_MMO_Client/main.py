@@ -19,12 +19,18 @@ def main():
     # Initiates character selection menu
     selected_character = character_selection()
 
-    # Gets chosen character's data
-    response = get_request.character(selected_character.name)
-    character_data = GameState(response)
+    # Gets chosen character's data and current tile data
+    character_data_request = get_request.character(selected_character.name)
+    map_data_request = get_request.map(character_data_request.x, character_data_request.y)
+    print(map_data_request)
+    print(map_data_request.content.type)
+
+    # Get data about characters current location
+    game_data = GameState(character_data_request, map_data_request)
+
 
     if selected_character:
-        game = Game(character_data)
+        game = Game(game_data)
         game.run()
 
         sys.exit()

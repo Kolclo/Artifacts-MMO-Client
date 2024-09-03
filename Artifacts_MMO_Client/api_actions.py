@@ -37,6 +37,10 @@ class FightError(Exception):
     def __init__(self) -> None:
         super().__init__("Failed to fight due to an error")
 
+class GatherError(Exception):
+    def __init__(self) -> None:
+        super().__init__("Failed to gather due to an error")
+
 
 # Get Actions
 class Get:
@@ -134,10 +138,12 @@ class Post:
         character: Character = Character(character_data)
         return character
 
-    def gather(self):
-        # /my/{name}/action/gathering
-        # Must be on a resource
-        pass
+    def gather(self, character_name: str):
+        response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/gathering")
+        self.__error_handler(response, GatherError)
+        character_data = response["data"]["character"]
+        character: Character = Character(character_data)
+        return character
 
     def craft(self):
         # /my/{name}/action/crafting

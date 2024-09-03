@@ -18,10 +18,12 @@ class Vector2:
         return Vector2(self.x - other.x, self.y - other.y)
 
 class CharacterController:
-    def __init__(self, character_name):
-        self.character_name = character_name
-        self.endpoint = f"my/{character_name}/action/move"
+    def __init__(self, game_state):
+        self.game_state = game_state
+        self.character_name = self.game_state.get_character_data().name
+        self.endpoint = f"my/{self.character_name}/action/move"
         self.character_location = None
+        self.tile_data = self.game_state.get_tile_data()
         
         self.get_request = Get()
         self.post_request = Post()
@@ -71,7 +73,15 @@ class CharacterController:
         if new_location:
             self.character_location = new_location
     
-    def fight(self):
-        response = self.post_request.fight(self.character_name)
-        print(f"Character attacked monster")
-        return response
+    def perform_action(self):
+        updated_tile_data = self.get_request.map(self.game_state.get_character_data().x, self.game_state.get_character_data().y)
+        self.game_state.set_tile_data(updated_tile_data)
+        tile_type = self.game_state.get_tile_data().content.type
+        if tile_type == "monster":
+            response = self.post_request.fight(self.character_name)
+            print(f"Character attacked monster")
+            return response
+        if tile_type == "resource":
+            response = self.post_request.gather(self.character_name)
+            print(f"Character gathered resource")
+            return response
