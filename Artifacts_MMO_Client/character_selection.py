@@ -25,7 +25,12 @@ def character_selection():
     pygame.display.set_icon(icon)
 
     # Load the background image
-    background_image = pygame.image.load("Artifacts_MMO_Client/resources/character_selection.png")
+    try:
+        background_image = pygame.image.load("Artifacts_MMO_Client/resources/character_selection.png")
+    except pygame.error as e:
+        print(f"Error loading background image: {e}")
+        pygame.quit()
+        sys.exit()
     background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH * 1.5, SCREEN_HEIGHT * 1.5))
 
     # Set the initial position of the background image
@@ -56,9 +61,14 @@ def character_selection():
         buttons.append(button)
 
         # Load the character image
-        image_name = character.skin
-        image = pygame.image.load(f"Artifacts_MMO_Client/resources/{image_name}.png")
-        image = pygame.transform.scale(image, (100, 121))
+        try:
+            image_name = character.skin
+            image = pygame.image.load(f"Artifacts_MMO_Client/resources/{image_name}.png")
+            image = pygame.transform.scale(image, (100, 121))
+        except pygame.error as e:
+            print(f"Error loading character image {image_name}: {e}")
+            pygame.quit()
+            sys.exit()
         images.append(image)
 
         # Create a rect for the image
@@ -71,9 +81,12 @@ def character_selection():
 
     # Load and play the background music
     pygame.mixer.init()
-    background_music = pygame.mixer.Sound("Artifacts_MMO_Client/resources/music/character_selection1.wav")
-    background_music.set_volume(0.5)  # Set the volume to 50%
-    background_music.play(-1)  # Play the music in a loop
+    try:
+        background_music = pygame.mixer.Sound("Artifacts_MMO_Client/resources/music/character_selection1.wav")
+        background_music.set_volume(0.5)  # Set the volume to 50%
+        background_music.play(-1)  # Play the music in a loop
+    except pygame.error as e:
+        print(f"Error loading background music: {e}")
 
     # Main loop
     clock = pygame.time.Clock()
