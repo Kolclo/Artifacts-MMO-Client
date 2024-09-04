@@ -59,6 +59,13 @@ Add support for more actions using APIs
 - [ ] Create corresponding API actions
 - [ ] Error handling
 
+### Equip/Unequip
+- [ ] Equip items
+- [ ] Unequip items
+- [ ] Toggle feature - eg. 'W' will equip or unequip Weapon?
+- [ ] Create corresponding API actions
+- [ ] Error handles
+
 (and more once these are done)
 
 ### Map

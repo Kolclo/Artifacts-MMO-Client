@@ -41,6 +41,10 @@ class GatherError(Exception):
     def __init__(self) -> None:
         super().__init__("Failed to gather due to an error")
 
+class UnequipError(Exception):
+    def __init__(self) -> None:
+        super().__init__("Failed to unequip due to an error")
+
 
 # Get Actions
 class Get:
@@ -245,14 +249,13 @@ class Post:
         # }
         pass
 
-    def unequip(self):
-        # /my/{name}/action/unequip
-
-        # {
-        # "slot": "weapon",
-        # "quantity": 1
-        # }
-        pass
+    def unequip(self, character_name: str, data):
+        slot = {"slot": data}
+        response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/unequip", slot)
+        self.__error_handler(response, UnequipError)
+        character_data = response["data"]["character"]
+        character: Character = Character(character_data)
+        return character
     
 
     # Task-related

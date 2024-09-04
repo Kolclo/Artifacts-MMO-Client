@@ -152,3 +152,8 @@ class CharacterController:
             response = self.post_request.gather(self.character_name)
             print(f"Character gathered resource")
             return response
+    
+    def unequip(self, slot: str):
+        response = self.post_request.unequip(self.character_name, slot)
+        print(f"Character unequipped {slot}")
+        return response

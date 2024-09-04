@@ -1,12 +1,12 @@
 from character_selection import character_selection
-from controller import CharacterController
+from data.character import Character
+from data.map import Map
 from mapper import Game
 from api_actions import Get
 from game_state import GameState
 import sys
 
 def main():
-    # Sets up requests for later use
     """Main entry point for the game.
 
     Performs initial setup of requests, checks if the server is online, and then
@@ -14,6 +14,7 @@ def main():
     the game data is retrieved and used to create a Game object, which is then
     run until the game loop is exited.
     """
+    # Sets up requests
     get_request = Get()
 
     # Checks whether server is online
@@ -24,15 +25,13 @@ def main():
     print("Server is online! Continuing game initialisation.")
 
     # Initiates character selection menu
-    selected_character = character_selection()
+    selected_character: Character = character_selection()
 
-    # Gets chosen character's data and current tile data
-    character_data_request = get_request.character(selected_character.name)
-    map_data_request = get_request.map(character_data_request.x, character_data_request.y)
+    # Gets chosen character's current tile data
+    map_data_request: Map = get_request.map(selected_character.x, selected_character.y)
 
     # Get data about characters current location
-    game_data = GameState(character_data_request, map_data_request)
-
+    game_data: GameState = GameState(selected_character, map_data_request)
 
     if selected_character:
         game = Game(game_data)

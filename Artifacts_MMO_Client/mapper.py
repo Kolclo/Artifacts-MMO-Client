@@ -8,10 +8,10 @@ from controller import CharacterController
 class Character:
     def __init__(self, game_state):
         self.game_state = game_state
-        self.x = self.game_state.get_character_data().x + 5
-        self.y = self.game_state.get_character_data().y + 5
-        self.skin = self.game_state.get_character_data().skin
-        self.sprite = pygame.image.load(f"Artifacts_MMO_Client/resources/{self.skin}.png")
+        self.x: int = self.game_state.get_character_data().x + 5
+        self.y: int = self.game_state.get_character_data().y + 5
+        self.skin: str = self.game_state.get_character_data().skin
+        self.sprite: pygame.surface.Surface = pygame.image.load(f"Artifacts_MMO_Client/resources/{self.skin}.png")
         self.sprite = pygame.transform.scale(self.sprite, (40, 50))
 
     def draw(self, window):
@@ -28,20 +28,20 @@ class Character:
 class Game:
     def __init__(self, game_state):
         self.game_state = game_state
-        self.map_tile_length = 17
-        self.map_tile_height = 21
-        self.tile_size = 65
-        self.window_width = self.map_tile_length * self.tile_size
-        self.window_height = self.map_tile_height * self.tile_size
+        self.map_tile_length: int = 17
+        self.map_tile_height: int = 21
+        self.tile_size: int = 65
+        self.window_width: int = self.map_tile_length * self.tile_size
+        self.window_height: int = self.map_tile_height * self.tile_size
         self.pygame_init()
-        self.character = Character(game_state)
-        self.character_name = self.game_state.get_character_data().name
-        self.controller = CharacterController(game_state)
-        self.move_up = 0
-        self.move_down = 0
-        self.move_left = 0
-        self.move_right = 0
-        self.cooldown = 0
+        self.character: Character = Character(game_state)
+        self.character_name: str = self.game_state.get_character_data().name
+        self.controller: CharacterController = CharacterController(game_state)
+        self.move_up: int = 0
+        self.move_down: int = 0
+        self.move_left: int = 0
+        self.move_right: int = 0
+        self.cooldown: int = 0
         self.get_request = Get()
 
     def pygame_init(self):
@@ -55,11 +55,11 @@ class Game:
         self.window = pygame.display.set_mode((self.window_width, self.window_height))
         pygame.display.set_caption("ArtifactsMMO - World")
 
-    def load_images(self, data):
+    def load_images(self, data: list[dict[str, str | int]]):
         """Loads and scales each tiles resources
 
         Args:
-            data (list): A list of dictionaries describing each tile on the map
+            data (list[dict[str, str | int]]): A list of dictionaries describing each tile on the map
 
         Returns:
             images (dict): A dictionary with the skin of each tile as the key and the loaded and scaled image as the value
@@ -76,11 +76,19 @@ class Game:
                 print(f"Image file '{image_path}' not found. Skipping...")
         return images
 
-    def create_grid(self, width, height):
-        """Creates a 2D grid of size width x height, filled with None values."""
+    def create_grid(self, width: int, height: int):
+        """Creates a 2D grid of size width x height, filled with None values.
+
+        Args:
+            width (int): The width of the grid
+            height (int): The height of the grid
+
+        Returns:
+            list: A 2D grid of size width x height, filled with None values
+        """
         return [[None for _ in range(width)] for _ in range(height)]
 
-    def map_tiles_to_images(self, data, images, grid):
+    def map_tiles_to_images(self, data: list[dict[str, str | int]], images: dict, grid: list):
         """Maps each tile to an image and stores in a grid
 
         Args:
@@ -105,7 +113,7 @@ class Game:
             else:
                 print(f"Image not found for tile with skin '{skin}' at coordinates ({x}, {y})")
 
-    def draw_grid(self, grid):
+    def draw_grid(self, grid: list):
         """Clears window and draws the grid of tile images. Then draws the character on top of the grid.
 
         Args:
@@ -119,7 +127,7 @@ class Game:
         # Draws character on top of grid
         self.character.draw(self.window)
 
-    def handle_events(self, grid):
+    def handle_events(self, grid: list):
         """Handles pygame events and updates the character's position accordingly.
 
         Updates the grid by calling draw_grid and then redraws the window with the updated grid.
@@ -161,6 +169,9 @@ class Game:
                     self.character.x = response.x + 5
                     self.character.y = response.y + 5
                     self.draw_grid(grid)
+                elif event.key == pygame.K_w:
+                    response = self.controller.unequip("weapon")
+
 
                 # Stops character from leaving the map
                 self.character.x = max(0, min(self.character.x, self.map_tile_length - 1))
@@ -179,7 +190,7 @@ class Game:
 
         The game loop will then run until the user closes the window, at which point the pygame window will be closed and the program will exit.
         """
-        map_data = self.get_request.all_maps()
+        map_data: list[dict[str, str | int]] = self.get_request.all_maps()
 
         images = self.load_images(map_data)
         grid = self.create_grid(self.map_tile_length, self.map_tile_height)
