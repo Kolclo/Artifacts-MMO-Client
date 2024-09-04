@@ -7,6 +7,13 @@ import sys
 
 def main():
     # Sets up requests for later use
+    """Main entry point for the game.
+
+    Performs initial setup of requests, checks if the server is online, and then
+    initiates the character selection menu. After the character has been selected,
+    the game data is retrieved and used to create a Game object, which is then
+    run until the game loop is exited.
+    """
     get_request = Get()
 
     # Checks whether server is online
@@ -22,8 +29,6 @@ def main():
     # Gets chosen character's data and current tile data
     character_data_request = get_request.character(selected_character.name)
     map_data_request = get_request.map(character_data_request.x, character_data_request.y)
-    print(map_data_request)
-    print(map_data_request.content.type)
 
     # Get data about characters current location
     game_data = GameState(character_data_request, map_data_request)

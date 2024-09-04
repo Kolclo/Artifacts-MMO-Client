@@ -68,14 +68,15 @@ Render an interactive and dynamic map
 - [ ] Support for map zooming?
 - [x] Show character sprite on top of map
 - [x] Show character sprite in correct server-side location + potential caching (half done)
-- [ ] Only move character sprite client-side if the character has moved server-side
+- [x] Only move character sprite client-side if the character has moved server-side
 - [x] Display correct character sprite depending on current character in use
 - [ ] Ability to request new resources when they're not found locally
 - [ ] Display name of the location you're hovering over in corner
 - [ ] Display current location name in corner or near map
 - [ ] Add pins to map?
+- [ ] Save data from all_maps() to GameState and deprecate map() by using this data
 
-Controls - bugs
+### Controls - bugs
 - [x] Button press should trigger movement/action
 - [ ] Subsequent presses should be stored (for movement) 
 - [ ] When cooldown has ended, add total subsequent presses and move that much. (eg. 4x up, 3x left, and 1x down would move the character to the tile that is 3 up and 3 left in one move)

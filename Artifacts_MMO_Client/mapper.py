@@ -15,10 +15,14 @@ class Character:
         self.sprite = pygame.transform.scale(self.sprite, (40, 50))
 
     def draw(self, window):
-        # Calculate the offset to center the sprite on the tile
+        """Draws the character sprite on the given window at the correct position.
+
+        This function first calculates the offset needed to center the sprite on the tile.
+        Then it draws the sprite at the correct position using the offset.
+        """
         offset_x = (65 - self.sprite.get_width()) // 2
         offset_y = (65 - self.sprite.get_height()) // 2
-        # Draw the sprite
+
         window.blit(self.sprite, (self.x * 65 + offset_x, self.y * 65 + offset_y))
 
 class Game:
@@ -41,12 +45,25 @@ class Game:
         self.get_request = Get()
 
     def pygame_init(self):
+        """Initializes the pygame window with the correct size and title.
+
+        self.window_width and self.window_height are used to set the size of the window.
+        The window is given the title "ArtifactsMMO - World".
+        """
+
         pygame.init()
         self.window = pygame.display.set_mode((self.window_width, self.window_height))
         pygame.display.set_caption("ArtifactsMMO - World")
 
     def load_images(self, data):
-        # Loads and scales each tiles resources
+        """Loads and scales each tiles resources
+
+        Args:
+            data (list): A list of dictionaries describing each tile on the map
+
+        Returns:
+            images (dict): A dictionary with the skin of each tile as the key and the loaded and scaled image as the value
+        """
         images = {}
         for tile in data:
             skin = tile["skin"]
@@ -60,11 +77,20 @@ class Game:
         return images
 
     def create_grid(self, width, height):
-        # Creates 2D grid
+        """Creates a 2D grid of size width x height, filled with None values."""
         return [[None for _ in range(width)] for _ in range(height)]
 
     def map_tiles_to_images(self, data, images, grid):
-        # Maps each tile to an image and stores in a grid
+        """Maps each tile to an image and stores in a grid
+
+        Args:
+            data (list): A list of dictionaries describing each tile on the map
+            images (dict): A dictionary with the skin of each tile as the key and the loaded and scaled image as the value
+            grid (list): A 2D grid of size width x height, filled with None values
+
+        Returns:
+            None
+        """
         for tile in data:
             x = tile["x"]
             y = tile["y"]
@@ -80,7 +106,11 @@ class Game:
                 print(f"Image not found for tile with skin '{skin}' at coordinates ({x}, {y})")
 
     def draw_grid(self, grid):
-        # Clears window and draws the grid of tile images
+        """Clears window and draws the grid of tile images. Then draws the character on top of the grid.
+
+        Args:
+            grid (list): A 2D grid of size width x height, filled with None values
+        """
         self.window.fill((0, 0, 0))
         for y, row in enumerate(grid):
             for x, image in enumerate(row):
@@ -90,6 +120,13 @@ class Game:
         self.character.draw(self.window)
 
     def handle_events(self, grid):
+        """Handles pygame events and updates the character's position accordingly.
+
+        Updates the grid by calling draw_grid and then redraws the window with the updated grid.
+
+        Returns:
+            bool: True if the game should continue, False if the game should quit
+        """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False
@@ -119,7 +156,6 @@ class Game:
                     self.game_state.set_character_data(character_data)
                     self.controller.move_down()
                 elif event.key == pygame.K_SPACE:
-                    # self.controller.fight()
                     self.controller.perform_action()
                     response = self.get_request.character(self.character_name)
                     self.character.x = response.x + 5
@@ -137,6 +173,12 @@ class Game:
         return True
 
     def run(self):
+        """Main game loop.
+
+        This method will load all maps from the API, create a grid of the correct size, load the images for each tile on the map, and map each tile to its corresponding image.
+
+        The game loop will then run until the user closes the window, at which point the pygame window will be closed and the program will exit.
+        """
         map_data = self.get_request.all_maps()
 
         images = self.load_images(map_data)

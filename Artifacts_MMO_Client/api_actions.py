@@ -54,20 +54,46 @@ class Get:
 
 
     def server_status(self) -> dict[str, str | int]:
+        """Get the server status.
+        
+        Returns:
+            Server status (dict[str, str | int]): Server status data
+        """
         response: dict[str, str | int] = self.send_request.get("/")
         return response["data"]
     
     def resource(self, resource_name: str) -> Resource:
+        """Get details of a resource by name.
+        
+        Args:
+            resource_name (str): Name of the resource to get
+        
+        Returns:
+            Resource: Resource object with the given name and details
+        """
         response: dict[str, str | int] = self.send_request.get(f"/resources/{resource_name}")
         self.__error_handler(response, GetResourceError)
         return Resource(response["data"])
     
     def monster(self, monster_name: str) -> Monster:
+        """Get details of a monster by name.
+        
+        Args:
+            monster_name (str): Name of the monster to get
+        
+        Returns:
+            Monster: Monster object with the given name and details
+        """
         response: dict[str, str | int] = self.send_request.get(f"/resources/{monster_name}")
         self.__error_handler(response, GetMonsterError)
         return Monster(response["data"])
 
     def all_maps(self):
+        """Get all maps from the API.
+        
+        Returns:
+            Data (list[dict[str, str | int]]): List of all map data
+        """
         data = []
         page = 1
         while True:
@@ -79,22 +105,49 @@ class Get:
         return data
     
     def map(self, position_x: int, position_y: int) -> Map:
+        """Get map data from the API by position.
+        
+        Args:
+            position_x (int): The x position of the map
+            position_y (int): The y position of the map
+        
+        Returns:
+            Map: Map object with the given position and details
+        """
         response: dict[str, str | int] = self.send_request.get(f"/maps/{position_x}/{position_y}")
         self.__error_handler(response, GetMapError)
         return Map(response["data"])
     
     def event(self) -> list[dict[str, str | int]]:
+        """Get all events from the API.
+        
+        Returns:
+            Events (list[dict[str, str | int]]): List of all event data
+        """
         response: dict[str, list[dict[str, str | int]]] = self.send_request.get("/events/")
         self.__error_handler(response, GetEventsError)
         return response["data"]
     
     def characters(self) -> list[Character]:
+        """Get all available characters for the current user.
+        
+        Returns:
+            Characters (list[Character]): List of all characters for the user
+        """
         response: dict[str, list[dict[str, str | int]]] = self.send_request.get("/my/characters/")
         self.__error_handler(response, NoCharactersExistError)
         characters: list[Character] = [Character(character_data) for character_data in response["data"]]
         return characters
     
     def character(self, character_name: str) -> Character:
+        """Get all details on a character by name.
+        
+        Args:
+            character_name (str): The name of the character to get
+        
+        Returns:
+            Character: The character object with the given name and details
+        """
         response: dict[str, str | int | list[dict[str, str | int]]] = self.send_request.get(f"/characters/{character_name}", params={"name": {character_name}})
         self.__error_handler(response, NoCharactersExistError)
         return Character(response["data"])
@@ -111,6 +164,16 @@ class Post:
 
     # Primary Actions
     def move_character(self, character_name: str, position_x: int, position_y: int):
+        """Move the character to the given location.
+        
+        Args:
+            character_name (str): The name of the character to move
+            position_x (int): The x position of the location to move to
+            position_y (int): The y position of the location to move to
+        
+        Returns:
+            Character: The character object with updated data
+        """
         max_retries = 3
         retries = 0
         while retries < max_retries:
@@ -132,6 +195,14 @@ class Post:
             raise MoveCharacterError
     
     def fight(self, character_name: str):
+        """Engage in combat with the current monster the character is at.
+        
+        Args:
+            character_name (str): The name of the character to engage in combat
+        
+        Returns:
+            Character: The character object with updated data
+        """
         response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/fight")
         self.__error_handler(response, FightError)
         character_data = response["data"]["character"]
@@ -139,6 +210,14 @@ class Post:
         return character
 
     def gather(self, character_name: str):
+        """Gather resources at the character's current location.
+        
+        Args:
+            character_name (str): The name of the character to gather resources
+        
+        Returns:
+            Character: The character object with updated data
+        """
         response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/gathering")
         self.__error_handler(response, GatherError)
         character_data = response["data"]["character"]
