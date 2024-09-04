@@ -11,45 +11,38 @@ def character_selection():
     """
     pygame.init()
 
-    # Set up some constants
-    WIDTH, HEIGHT = 1200, 1200
+    # Set up constants
+    SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 1200
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
     FONT_SIZE = 48
     FONT_MACONDO_LOCATION = "Artifacts_MMO_Client/resources/Macondo-Regular.ttf"
 
     # Set up the display
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("ArtifactsMMO - Character Selection")
     icon = pygame.image.load("Artifacts_MMO_Client/resources/icon1.png")
     pygame.display.set_icon(icon)
 
     # Load the background image
     background_image = pygame.image.load("Artifacts_MMO_Client/resources/character_selection.png")
-    background_image = pygame.transform.scale(background_image, (WIDTH * 1.5, HEIGHT * 1.5))
+    background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH * 1.5, SCREEN_HEIGHT * 1.5))
 
     # Set the initial position of the background image
     background_x = 0
     background_y = 0
-    
-    pygame.transform.scale(background_image, (WIDTH, HEIGHT))
 
     # Get the list of characters from the API
     get_request = Get()
     characters = get_request.characters()
 
-    # Since 'data' is a list of characters, we need to iterate over it
-    character_list = []
-    for character_data in characters:
-        character_list.append(character_data)
-
     # Set up the font
     font = pygame.font.Font(FONT_MACONDO_LOCATION, FONT_SIZE)
 
     # Calculate the spacing between buttons
-    num_buttons = len(character_list)
+    num_buttons = len(characters)
     button_height = 40
-    spacing = (HEIGHT - (num_buttons * (button_height + 50))) // (num_buttons + 1)
+    spacing = (SCREEN_HEIGHT - (num_buttons * (button_height + 50))) // (num_buttons + 1)
 
     # Set up the character buttons
     buttons = []
@@ -57,9 +50,9 @@ def character_selection():
     image_rects = []
     scales = []  # New list to store the current scale of each image
     velocities = []  # New list to store the velocity of each image's scale
-    for i, character in enumerate(character_list):
+    for i, character in enumerate(characters):
         y = spacing + (i * (button_height + 50 + spacing))
-        button = pygame.Rect(WIDTH // 2 - 100, y + 50, 200, button_height)
+        button = pygame.Rect(SCREEN_WIDTH // 2 - 100, y + 50, 200, button_height)
         buttons.append(button)
 
         # Load the character image
@@ -93,16 +86,16 @@ def character_selection():
                 for i, (button, image_rect) in enumerate(zip(buttons, image_rects)):
                     if button.collidepoint(event.pos) or image_rect.collidepoint(event.pos):
                         # User clicked on a character button or image
-                        selected_character = character_list[i]
+                        selected_character = characters[i]
                         return selected_character
 
         # Create a larger background surface
-        background_surface = pygame.Surface((WIDTH * 2, HEIGHT * 4))  # Increased height to accommodate two screens
+        background_surface = pygame.Surface((SCREEN_WIDTH * 2, SCREEN_HEIGHT * 4))  # Increased height to accommodate two screens
 
         # Draw the background image onto the surface
         for i in range(2):
             for j in range(4):  # Increased range to draw two screens
-                background_surface.blit(background_image, (background_x + (i * WIDTH * 1.5), background_y + (j * HEIGHT * 1.5)))
+                background_surface.blit(background_image, (background_x + (i * SCREEN_WIDTH * 1.5), background_y + (j * SCREEN_HEIGHT * 1.5)))
 
         # Draw the background surface onto the screen
         screen.blit(background_surface, (0, 0))  # Draw at (0, 0) to avoid offsetting the background
@@ -112,9 +105,9 @@ def character_selection():
         background_y -= 1  # Update y-position to scroll vertically
 
         # Check if the background has scrolled two screens
-        if background_y < -HEIGHT * 2:
+        if background_y < -SCREEN_HEIGHT * 2:
             background_y = -600  # Reset y-position to the top of the first screen
-        if background_x < -WIDTH * 2:
+        if background_x < -SCREEN_WIDTH * 2:
             background_x = -600  # Reset x-position to the left of the first screen
 
         # Draw the character buttons
@@ -129,7 +122,7 @@ def character_selection():
             # Blit the circle surface onto the screen
             screen.blit(circle_surface, (button.centerx - 100, button.centery - 150))
 
-            text = font.render(character_list[i].name, True, BLACK)
+            text = font.render(characters[i].name, True, BLACK)
             text_rect = text.get_rect(center=button.center)
             screen.blit(text, text_rect)
 
