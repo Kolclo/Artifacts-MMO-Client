@@ -119,3 +119,7 @@ Prompt user to select a character to control
 - [x] Get a list of characters from API
 - [x] Display character list to user
 - [x] Allow for character selection
+
+
+make pygame module
+separate gamestate from character and mapper

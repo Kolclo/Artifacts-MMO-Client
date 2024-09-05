@@ -1,4 +1,7 @@
 from api_actions import Get, Post
+from data.character import Character
+from game_state import GameState
+from data.map import Map
 
 class Vector2:
     def __init__(self, x, y):
@@ -45,21 +48,21 @@ class Vector2:
 
 class CharacterController:
     def __init__(self, game_state):
-        self.game_state = game_state
-        self.character_name = self.game_state.get_character_data().name
-        self.endpoint = f"my/{self.character_name}/action/move"
+        self.game_state: GameState = game_state
+        self.character_name: str = self.game_state.get_character_data().name
+        self.endpoint: str = f"my/{self.character_name}/action/move"
         self.character_location = None
-        self.tile_data = self.game_state.get_tile_data()
+        self.tile_data: Map = self.game_state.get_tile_data()
         
-        self.get_request = Get()
-        self.post_request = Post()
+        self.get_request: Get = Get()
+        self.post_request: Post = Post()
 
-        self.UP = Vector2(0, -1)
-        self.DOWN = Vector2(0, 1)
-        self.LEFT = Vector2(-1, 0)
-        self.RIGHT = Vector2(1, 0)
+        self.UP: Vector2 = Vector2(0, -1)
+        self.DOWN: Vector2 = Vector2(0, 1)
+        self.LEFT: Vector2 = Vector2(-1, 0)
+        self.RIGHT: Vector2 = Vector2(1, 0)
 
-    def move_character(self, location: Vector2):
+    def move_character(self, location: Vector2) -> Vector2:
         """Move the character to the given location.
 
         Args:
@@ -74,7 +77,7 @@ class CharacterController:
         print(f"Character moved to ({new_location.x}, {new_location.y})")
         return new_location
 
-    def get_character_location(self):
+    def get_character_location(self) -> Vector2:
         """Get the current location of the character.
 
         Returns:
@@ -84,7 +87,7 @@ class CharacterController:
         self.character_location = Vector2(response.x, response.y)
         return self.character_location
 
-    def move_up(self):
+    def move_up(self) -> None:
         """Move the character up by one tile.
 
         If the character's current location is not known, it will be retrieved.
@@ -96,7 +99,7 @@ class CharacterController:
         if new_location:
             self.character_location = new_location
 
-    def move_down(self):
+    def move_down(self) -> None:
         """Move the character down by one tile.
 
         If the character's current location is not known, it will be retrieved.
@@ -108,7 +111,7 @@ class CharacterController:
         if new_location:
             self.character_location = new_location
 
-    def move_left(self):
+    def move_left(self) -> None:
         """Move the character left by one tile.
 
         If the character's current location is not known, it will be retrieved.
@@ -120,7 +123,7 @@ class CharacterController:
         if new_location:
             self.character_location = new_location
 
-    def move_right(self):
+    def move_right(self) -> None:
         """Move the character right by one tile.
 
         If the character's current location is not known, it will be retrieved.
@@ -132,7 +135,7 @@ class CharacterController:
         if new_location:
             self.character_location = new_location
     
-    def perform_action(self):
+    def perform_action(self) -> Character:
         """Check the current tile that the character is on and perform an action on it if appropriate.
 
         If the character is on a monster, they will attack it. If they are on a resource, they will gather it.

@@ -4,9 +4,10 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Hides Pygame welcome message
 import pygame
 from api_actions import Get
 from controller import CharacterController
+from game_state import GameState
 
 class Character:
-    def __init__(self, game_state):
+    def __init__(self, game_state) -> None:
         self.game_state = game_state
         self.x: int = self.game_state.get_character_data().x + 5
         self.y: int = self.game_state.get_character_data().y + 5
@@ -14,7 +15,7 @@ class Character:
         self.sprite: pygame.surface.Surface = pygame.image.load(f"Artifacts_MMO_Client/resources/{self.skin}.png")
         self.sprite = pygame.transform.scale(self.sprite, (40, 50))
 
-    def draw(self, window):
+    def draw(self, window: pygame.surface.Surface) -> None:
         """Draws the character sprite on the given window at the correct position.
 
         This function first calculates the offset needed to center the sprite on the tile.
@@ -27,7 +28,7 @@ class Character:
 
 class Game:
     def __init__(self, game_state):
-        self.game_state = game_state
+        self.game_state: GameState = game_state
         self.map_tile_length: int = 17
         self.map_tile_height: int = 21
         self.tile_size: int = 65
@@ -52,10 +53,10 @@ class Game:
         """
 
         pygame.init()
-        self.window = pygame.display.set_mode((self.window_width, self.window_height))
+        self.window: pygame.surface.Surface = pygame.display.set_mode((self.window_width, self.window_height))
         pygame.display.set_caption("ArtifactsMMO - World")
 
-    def load_images(self, data: list[dict[str, str | int]]):
+    def load_images(self, data: list[dict[str, str | int]]) -> dict:
         """Loads and scales each tiles resources
 
         Args:
@@ -76,7 +77,7 @@ class Game:
                 print(f"Image file '{image_path}' not found. Skipping...")
         return images
 
-    def create_grid(self, width: int, height: int):
+    def create_grid(self, width: int, height: int) -> list:
         """Creates a 2D grid of size width x height, filled with None values.
 
         Args:
@@ -88,7 +89,7 @@ class Game:
         """
         return [[None for _ in range(width)] for _ in range(height)]
 
-    def map_tiles_to_images(self, data: list[dict[str, str | int]], images: dict, grid: list):
+    def map_tiles_to_images(self, data: list[dict[str, str | int]], images: dict, grid: list) -> None:
         """Maps each tile to an image and stores in a grid
 
         Args:
@@ -113,7 +114,7 @@ class Game:
             else:
                 print(f"Image not found for tile with skin '{skin}' at coordinates ({x}, {y})")
 
-    def draw_grid(self, grid: list):
+    def draw_grid(self, grid: list) -> None:
         """Clears window and draws the grid of tile images. Then draws the character on top of the grid.
 
         Args:
@@ -127,7 +128,7 @@ class Game:
         # Draws character on top of grid
         self.character.draw(self.window)
 
-    def handle_events(self, grid: list):
+    def handle_events(self, grid: list) -> bool:
         """Handles pygame events and updates the character's position accordingly.
 
         Updates the grid by calling draw_grid and then redraws the window with the updated grid.
@@ -183,7 +184,7 @@ class Game:
 
         return True
 
-    def run(self):
+    def run(self) -> None:
         """Main game loop.
 
         This method will load all maps from the API, create a grid of the correct size, load the images for each tile on the map, and map each tile to its corresponding image.
@@ -196,7 +197,7 @@ class Game:
         grid = self.create_grid(self.map_tile_length, self.map_tile_height)
         self.map_tiles_to_images(map_data, images, grid)
 
-        running = True
+        running: bool = True
         while running:
             running = self.handle_events(grid)
             self.draw_grid(grid)
@@ -206,7 +207,7 @@ class Game:
         pygame.quit()
 
 if __name__ == "__main__":
-    get_request = Get()
-    character_data = get_request.character("Kieran")
-    game = Game(character_data)
+    get_request: Get = Get()
+    character_data: Character = get_request.character("Kieran")
+    game: Game = Game(character_data)
     game.run()

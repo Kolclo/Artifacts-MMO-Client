@@ -6,7 +6,7 @@ from api_actions import Get
 from game_state import GameState
 import sys
 
-def main():
+def main() -> None:
     """Main entry point for the game.
 
     Performs initial setup of requests, checks if the server is online, and then
@@ -15,7 +15,7 @@ def main():
     run until the game loop is exited.
     """
     # Sets up requests
-    get_request = Get()
+    get_request: Get = Get()
 
     # Checks whether server is online
     server_status = get_request.server_status()
@@ -34,7 +34,7 @@ def main():
     game_data: GameState = GameState(selected_character, map_data_request)
 
     if selected_character:
-        game = Game(game_data)
+        game: Game = Game(game_data)
         game.run()
 
         sys.exit()

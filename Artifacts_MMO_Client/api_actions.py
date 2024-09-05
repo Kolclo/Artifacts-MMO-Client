@@ -92,7 +92,7 @@ class Get:
         self.__error_handler(response, GetMonsterError)
         return Monster(response["data"])
 
-    def all_maps(self):
+    def all_maps(self) -> list[dict[str, str | int]]:
         """Get all maps from the API.
         
         Returns:
@@ -167,7 +167,7 @@ class Post:
         
 
     # Primary Actions
-    def move_character(self, character_name: str, position_x: int, position_y: int):
+    def move_character(self, character_name: str, position_x: int, position_y: int) -> Character:
         """Move the character to the given location.
         
         Args:
@@ -198,7 +198,7 @@ class Post:
             print("Failed to move character after {} retries".format(max_retries))
             raise MoveCharacterError
     
-    def fight(self, character_name: str):
+    def fight(self, character_name: str) -> Character:
         """Engage in combat with the current monster the character is at.
         
         Args:
@@ -213,7 +213,7 @@ class Post:
         character: Character = Character(character_data)
         return character
 
-    def gather(self, character_name: str):
+    def gather(self, character_name: str) -> Character:
         """Gather resources at the character's current location.
         
         Args:
@@ -249,7 +249,7 @@ class Post:
         # }
         pass
 
-    def unequip(self, character_name: str, data):
+    def unequip(self, character_name: str, data) -> Character:
         slot = {"slot": data}
         response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/unequip", slot)
         self.__error_handler(response, UnequipError)
