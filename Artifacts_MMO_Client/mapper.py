@@ -5,6 +5,7 @@ import pygame
 from api_actions import Get
 from controller import CharacterController
 from game_state import GameState
+from pygame_util import PygameUtils
 
 class Character:
     def __init__(self, game_state) -> None:
@@ -28,13 +29,13 @@ class Character:
 
 class Game:
     def __init__(self, game_state):
-        self.game_state: GameState = game_state
         self.map_tile_length: int = 17
         self.map_tile_height: int = 21
         self.tile_size: int = 65
         self.window_width: int = self.map_tile_length * self.tile_size
         self.window_height: int = self.map_tile_height * self.tile_size
-        self.pygame_init()
+        self.pygame_utils: PygameUtils = PygameUtils()
+        self.game_state: GameState = game_state
         self.character: Character = Character(game_state)
         self.character_name: str = self.game_state.get_character_data().name
         self.controller: CharacterController = CharacterController(game_state)
@@ -44,17 +45,6 @@ class Game:
         self.move_right: int = 0
         self.cooldown: int = 0
         self.get_request = Get()
-
-    def pygame_init(self):
-        """Initializes the pygame window with the correct size and title.
-
-        self.window_width and self.window_height are used to set the size of the window.
-        The window is given the title "ArtifactsMMO - World".
-        """
-
-        pygame.init()
-        self.window: pygame.surface.Surface = pygame.display.set_mode((self.window_width, self.window_height))
-        pygame.display.set_caption("ArtifactsMMO - World")
 
     def load_images(self, data: list[dict[str, str | int]]) -> dict:
         """Loads and scales each tiles resources
@@ -192,6 +182,8 @@ class Game:
         The game loop will then run until the user closes the window, at which point the pygame window will be closed and the program will exit.
         """
         map_data: list[dict[str, str | int]] = self.get_request.all_maps()
+
+        self.window = PygameUtils.pygame_init(self.window_width, self.window_height, "ArtifactsMMO - World")
 
         images = self.load_images(map_data)
         grid = self.create_grid(self.map_tile_length, self.map_tile_height)

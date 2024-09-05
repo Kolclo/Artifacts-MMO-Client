@@ -123,3 +123,5 @@ Prompt user to select a character to control
 
 make pygame module
 separate gamestate from character and mapper
+change name of Character inside Mapper.py
+make controllers update stored data
