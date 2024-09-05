@@ -45,6 +45,22 @@ class UnequipError(Exception):
     def __init__(self) -> None:
         super().__init__("Failed to unequip due to an error")
 
+class AcceptTaskError(Exception):
+    def __init__(self) -> None:
+        super().__init__("Failed to accept task due to an error")
+
+class CompleteTaskError(Exception):
+    def __init__(self) -> None:
+        super().__init__("Failed to complete task due to an error")
+
+class CancelTaskError(Exception):
+    def __init__(self) -> None:
+        super().__init__("Failed to cancel task due to an error")
+
+# Bank-related
+class BuyExpansionError(Exception):
+    def __init__(self) -> None:
+        super().__init__("Failed to buy expansion due to an error")
 
 # Get Actions
 class Get:
@@ -260,16 +276,25 @@ class Post:
 
     # Task-related
     def accept_task(self):
-        # /my/{name}/action/task/new
-        pass
+        response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/task/new")
+        self.__error_handler(response, AcceptTaskError)
+        character_data: dict = response["data"]["character"]
+        character: Character = Character(character_data)
+        return character
 
     def complete_task(self):
-        # /my/{name}/action/task/complete
-        pass
+        response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/task/complete")
+        self.__error_handler(response, CompleteTaskError)
+        character_data: dict = response["data"]["character"]
+        character: Character = Character(character_data)
+        return character
 
     def cancel_task(self):
-        # /my/{name}/action/task/cancel
-        pass
+        response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/task/cancel")
+        self.__error_handler(response, CancelTaskError)
+        character_data: dict = response["data"]["character"]
+        character: Character = Character(character_data)
+        return character
 
 
     # Bank-related
@@ -310,7 +335,11 @@ class Post:
 
     def buy_expansion(self):
         # /my/{name}/action/bank/buy_expansion
-        pass
+        response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/bank/buy_expansion")
+        self.__error_handler(response, BuyExpansionError)
+        character_data: dict = response["data"]["character"]
+        character: Character = Character(character_data)
+        return character
 
     # Exchange-related
     def buy_item(self):
