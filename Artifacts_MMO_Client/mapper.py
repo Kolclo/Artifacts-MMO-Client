@@ -37,7 +37,7 @@ class Game:
         self.window_height: int = self.map_tile_height * self.tile_size
         self.pygame_utils: PygameUtils = PygameUtils()
         self.game_state: GameState = game_state
-        self.character: CharacterSprite = CharacterSprite(game_state)
+        self.character_sprite: CharacterSprite = CharacterSprite(game_state)
         self.character_name: str = self.game_state.character_data.name
         self.controller: CharacterController = CharacterController(game_state)
         self.get_request = Get()
@@ -114,7 +114,7 @@ class Game:
                 if image:
                     self.window.blit(image, (x * self.tile_size, y * self.tile_size))
         # Draws character on top of grid
-        self.character.draw(self.window)
+        self.character_sprite.draw(self.window)
 
     def run(self) -> None:
         """Main game loop.
@@ -127,14 +127,14 @@ class Game:
 
         self.window = PygameUtils.pygame_init(self.window_width, self.window_height, "ArtifactsMMO - World", self.icon)
 
-        images = self.load_images(map_data)
-        grid = self.create_grid(self.map_tile_length, self.map_tile_height)
+        images: dict = self.load_images(map_data)
+        grid: list = self.create_grid(self.map_tile_length, self.map_tile_height)
         self.map_tiles_to_images(map_data, images, grid)
 
         running: bool = True
         while running:
             running = self.event_handler.handle_events(grid)
-            self.character.x, self.character.y = self.game_state.character_data.x + 5, self.game_state.character_data.y + 5
+            self.character_sprite.x, self.character_sprite.y = self.game_state.character_data.x + 5, self.game_state.character_data.y + 5
             self.draw_grid(grid)
             pygame.display.flip()
             pygame.time.Clock().tick(60)

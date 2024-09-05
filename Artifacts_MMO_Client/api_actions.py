@@ -178,19 +178,19 @@ class Post:
         Returns:
             Character: The character object with updated data
         """
-        max_retries = 3
-        retries = 0
+        max_retries: str = 3
+        retries: str = 0
         while retries < max_retries:
             try:
-                data = {"x": position_x, "y": position_y}
+                data: dict[str, int] = {"x": position_x, "y": position_y}
                 response: dict[str, dict[str, str | int | list[dict[str, str | int]]]] = self.send_request.post(f"/my/{character_name}/action/move", data)
                 self.__error_handler(response, MoveCharacterError)
-                character_data = response["data"]["character"]
+                character_data: dict = response["data"]["character"]
                 character: Character = Character(character_data)
                 return character
             except MoveCharacterError:
                 retries += 1
-                wait_period = float(response['error']['message'].split(': ')[1].split(' ')[0]) + 0.2
+                wait_period: float = float(response['error']['message'].split(': ')[1].split(' ')[0]) + 0.2
                 print(f"Retrying in {wait_period} seconds...")
                 # Wait for cooldown period before trying to move again
                 time.sleep(wait_period)
@@ -209,7 +209,7 @@ class Post:
         """
         response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/fight")
         self.__error_handler(response, FightError)
-        character_data = response["data"]["character"]
+        character_data: dict = response["data"]["character"]
         character: Character = Character(character_data)
         return character
 
@@ -224,7 +224,7 @@ class Post:
         """
         response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/gathering")
         self.__error_handler(response, GatherError)
-        character_data = response["data"]["character"]
+        character_data: dict = response["data"]["character"]
         character: Character = Character(character_data)
         return character
 
@@ -253,7 +253,7 @@ class Post:
         slot = {"slot": data}
         response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/unequip", slot)
         self.__error_handler(response, UnequipError)
-        character_data = response["data"]["character"]
+        character_data: dict = response["data"]["character"]
         character: Character = Character(character_data)
         return character
     

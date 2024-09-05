@@ -16,7 +16,7 @@ class SendRequest:
             headers: The headers to include with every API request.
         """
         self.requests_module: requests = requests_module
-        self.url = "https://api.artifactsmmo.com/"
+        self.url: str = "https://api.artifactsmmo.com/"
         self.headers: str = {
             "Accept": "application/json",
             "Authorization": f"Bearer {api_token['token']}",
