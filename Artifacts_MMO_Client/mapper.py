@@ -11,9 +11,9 @@ from event_handler import EventHandler
 class CharacterSprite:
     def __init__(self, game_state) -> None:
         self.game_state = game_state
-        self.x: int = self.game_state.get_character_data().x + 5
-        self.y: int = self.game_state.get_character_data().y + 5
-        self.skin: str = self.game_state.get_character_data().skin
+        self.x: int = self.game_state.character_data.x + 5
+        self.y: int = self.game_state.character_data.y + 5
+        self.skin: str = self.game_state.character_data.skin
         self.sprite: pygame.surface.Surface = pygame.image.load(f"Artifacts_MMO_Client/resources/{self.skin}.png")
         self.sprite = pygame.transform.scale(self.sprite, (40, 50))
 
@@ -38,7 +38,7 @@ class Game:
         self.pygame_utils: PygameUtils = PygameUtils()
         self.game_state: GameState = game_state
         self.character: CharacterSprite = CharacterSprite(game_state)
-        self.character_name: str = self.game_state.get_character_data().name
+        self.character_name: str = self.game_state.character_data.name
         self.controller: CharacterController = CharacterController(game_state)
         self.get_request = Get()
         self.event_handler: EventHandler = EventHandler(self.game_state)
@@ -134,7 +134,7 @@ class Game:
         running: bool = True
         while running:
             running = self.event_handler.handle_events(grid)
-            self.character.x, self.character.y = self.game_state.get_character_data().x + 5, self.game_state.get_character_data().y + 5
+            self.character.x, self.character.y = self.game_state.character_data.x + 5, self.game_state.character_data.y + 5
             self.draw_grid(grid)
             pygame.display.flip()
             pygame.time.Clock().tick(60)

@@ -49,10 +49,10 @@ class Vector2:
 class CharacterController:
     def __init__(self, game_state):
         self.game_state: GameState = game_state
-        self.character_name: str = self.game_state.get_character_data().name
+        self.character_name: str = self.game_state.character_data.name
         self.endpoint: str = f"my/{self.character_name}/action/move"
         self.character_location = None
-        self.tile_data: Map = self.game_state.get_tile_data()
+        self.tile_data: Map = self.game_state.tile_data
         
         self.get_request: Get = Get()
         self.post_request: Post = Post()
@@ -75,9 +75,7 @@ class CharacterController:
         new_location = Vector2(response.x, response.y)
         self.character_location = new_location
 
-        character_data = self.game_state.get_character_data()
-        character_data.x, character_data.y = new_location.x, new_location.y
-        self.game_state.set_character_data(character_data)
+        self.game_state.character_data.x, self.game_state.character_data.y = new_location.x, new_location.y
 
         print(f"Character moved to ({new_location.x}, {new_location.y})")
         return new_location
@@ -149,18 +147,18 @@ class CharacterController:
         Returns:
             response (Character): The updated character object
         """
-        updated_tile_data = self.get_request.map(self.game_state.get_character_data().x, self.game_state.get_character_data().y)
-        self.game_state.set_tile_data(updated_tile_data)
-        tile_type = self.game_state.get_tile_data().content.type
+        updated_tile_data = self.get_request.map(self.game_state.character_data.x, self.game_state.character_data.y)
+        self.game_state.tile_data = updated_tile_data
+        tile_type = self.game_state.tile_data.content.type
         if tile_type == "monster":
             response = self.post_request.fight(self.character_name)
             print(f"Character attacked monster")
-            self.game_state.set_character_data(response)
+            self.game_state.character_data = response
             return response
         elif tile_type == "resource":
             response = self.post_request.gather(self.character_name)
             print(f"Character gathered resource")
-            self.game_state.set_character_data(response)
+            self.game_state.character_data = response
             return response
     
     def unequip(self, slot: str):
