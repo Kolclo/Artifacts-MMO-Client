@@ -74,6 +74,11 @@ class CharacterController:
         response = self.post_request.move_character(self.character_name, location.x, location.y)
         new_location = Vector2(response.x, response.y)
         self.character_location = new_location
+
+        character_data = self.game_state.get_character_data()
+        character_data.x, character_data.y = new_location.x, new_location.y
+        self.game_state.set_character_data(character_data)
+
         print(f"Character moved to ({new_location.x}, {new_location.y})")
         return new_location
 
@@ -150,10 +155,12 @@ class CharacterController:
         if tile_type == "monster":
             response = self.post_request.fight(self.character_name)
             print(f"Character attacked monster")
+            self.game_state.set_character_data(response)
             return response
         elif tile_type == "resource":
             response = self.post_request.gather(self.character_name)
             print(f"Character gathered resource")
+            self.game_state.set_character_data(response)
             return response
     
     def unequip(self, slot: str):

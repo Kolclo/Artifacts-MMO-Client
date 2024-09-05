@@ -1,4 +1,4 @@
-from character_selection import character_selection
+from character_selection import CharacterSelector
 from data.character import Character
 from data.map import Map
 from mapper import Game
@@ -25,7 +25,8 @@ def main() -> None:
     print("Server is online! Continuing game initialisation.")
 
     # Initiates character selection menu
-    selected_character: Character = character_selection()
+    character_selector: CharacterSelector = CharacterSelector()
+    selected_character: Character = character_selector.run()
 
     # Gets chosen character's current tile data
     map_data_request: Map = get_request.map(selected_character.x, selected_character.y)

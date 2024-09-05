@@ -125,3 +125,4 @@ make pygame module
 separate gamestate from character and mapper
 change name of Character inside Mapper.py
 make controllers update stored data
+make cooldown check into reusable function

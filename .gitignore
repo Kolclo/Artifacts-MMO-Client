@@ -2,6 +2,7 @@
 credentials.py
 python_artifacts.log
 notes.txt
+*.old
 
 *.psd
 *.DS_Store

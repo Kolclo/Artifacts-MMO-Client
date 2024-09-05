@@ -6,8 +6,9 @@ from api_actions import Get
 from controller import CharacterController
 from game_state import GameState
 from pygame_util import PygameUtils
+from event_handler import EventHandler
 
-class Character:
+class CharacterSprite:
     def __init__(self, game_state) -> None:
         self.game_state = game_state
         self.x: int = self.game_state.get_character_data().x + 5
@@ -36,15 +37,12 @@ class Game:
         self.window_height: int = self.map_tile_height * self.tile_size
         self.pygame_utils: PygameUtils = PygameUtils()
         self.game_state: GameState = game_state
-        self.character: Character = Character(game_state)
+        self.character: CharacterSprite = CharacterSprite(game_state)
         self.character_name: str = self.game_state.get_character_data().name
         self.controller: CharacterController = CharacterController(game_state)
-        self.move_up: int = 0
-        self.move_down: int = 0
-        self.move_left: int = 0
-        self.move_right: int = 0
-        self.cooldown: int = 0
         self.get_request = Get()
+        self.event_handler: EventHandler = EventHandler(self.game_state)
+        self.icon: pygame.Surface = pygame.image.load("Artifacts_MMO_Client/resources/icon1.png")
 
     def load_images(self, data: list[dict[str, str | int]]) -> dict:
         """Loads and scales each tiles resources
@@ -118,62 +116,6 @@ class Game:
         # Draws character on top of grid
         self.character.draw(self.window)
 
-    def handle_events(self, grid: list) -> bool:
-        """Handles pygame events and updates the character's position accordingly.
-
-        Updates the grid by calling draw_grid and then redraws the window with the updated grid.
-
-        Returns:
-            bool: True if the game should continue, False if the game should quit
-        """
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    self.character.x -= 1
-                    character_data = self.game_state.get_character_data()
-                    character_data.x = self.character.x - 5
-                    self.game_state.set_character_data(character_data)
-                    self.controller.move_left()
-                elif event.key == pygame.K_RIGHT:
-                    self.character.x += 1
-                    character_data = self.game_state.get_character_data()
-                    character_data.x = self.character.x - 5
-                    self.game_state.set_character_data(character_data)
-                    self.controller.move_right()
-                elif event.key == pygame.K_UP:
-                    self.character.y -= 1
-                    character_data = self.game_state.get_character_data()
-                    character_data.y = self.character.y - 5
-                    self.game_state.set_character_data(character_data)
-                    self.controller.move_up()
-                elif event.key == pygame.K_DOWN:
-                    self.character.y += 1
-                    character_data = self.game_state.get_character_data()
-                    character_data.y = self.character.y - 5
-                    self.game_state.set_character_data(character_data)
-                    self.controller.move_down()
-                elif event.key == pygame.K_SPACE:
-                    self.controller.perform_action()
-                    response = self.get_request.character(self.character_name)
-                    self.character.x = response.x + 5
-                    self.character.y = response.y + 5
-                    self.draw_grid(grid)
-                elif event.key == pygame.K_w:
-                    response = self.controller.unequip("weapon")
-
-
-                # Stops character from leaving the map
-                self.character.x = max(0, min(self.character.x, self.map_tile_length - 1))
-                self.character.y = max(0, min(self.character.y, self.map_tile_height - 1))
-
-                # Redraw the grid after character movement
-                self.draw_grid(grid)
-                pygame.display.flip()
-
-        return True
-
     def run(self) -> None:
         """Main game loop.
 
@@ -183,7 +125,7 @@ class Game:
         """
         map_data: list[dict[str, str | int]] = self.get_request.all_maps()
 
-        self.window = PygameUtils.pygame_init(self.window_width, self.window_height, "ArtifactsMMO - World")
+        self.window = PygameUtils.pygame_init(self.window_width, self.window_height, "ArtifactsMMO - World", self.icon)
 
         images = self.load_images(map_data)
         grid = self.create_grid(self.map_tile_length, self.map_tile_height)
@@ -191,7 +133,8 @@ class Game:
 
         running: bool = True
         while running:
-            running = self.handle_events(grid)
+            running = self.event_handler.handle_events(grid)
+            self.character.x, self.character.y = self.game_state.get_character_data().x + 5, self.game_state.get_character_data().y + 5
             self.draw_grid(grid)
             pygame.display.flip()
             pygame.time.Clock().tick(60)
@@ -200,6 +143,6 @@ class Game:
 
 if __name__ == "__main__":
     get_request: Get = Get()
-    character_data: Character = get_request.character("Kieran")
+    character_data = get_request.character("Kieran")
     game: Game = Game(character_data)
     game.run()
