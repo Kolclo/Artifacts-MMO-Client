@@ -10,7 +10,7 @@ class EventHandler:
         # self.move_right: int = 0
         # self.cooldown: int = 0
 
-    def handle_events(self, grid: list) -> bool:
+    def handle_events(self) -> bool:
         """Handles pygame events and updates the character's position accordingly.
 
         Updates the grid by calling draw_grid and then redraws the window with the updated grid.

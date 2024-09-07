@@ -135,7 +135,7 @@ class Game:
 
         running: bool = True
         while running:
-            running = self.event_handler.handle_events(grid)
+            running = self.event_handler.handle_events()
             self.character_sprite.x, self.character_sprite.y = self.game_state.character_data.x + 5, self.game_state.character_data.y + 5
             self.draw_grid(grid)
             pygame.display.flip()
