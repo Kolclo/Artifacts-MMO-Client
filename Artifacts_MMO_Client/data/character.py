@@ -101,6 +101,11 @@ class Character:
         )
 
     def is_cooldown_active(self) -> int:
+        """Calculate the time left until the cooldown expires.
+
+        Returns:
+            int: The number of seconds until the cooldown expires.
+        """
         current_time = datetime.now(timezone.utc)
         cooldown_diff = (self.cooldown_expiration - current_time).total_seconds()
         return cooldown_diff

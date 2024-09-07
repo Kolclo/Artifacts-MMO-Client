@@ -189,6 +189,13 @@ class Post:
         self.game_state: GameState = game_state
 
     def __error_handler(self, response: dict[str, str], exception_handler: Exception) -> None:
+        """Checks if a response contains an error key and raises the given exception
+        if it does.
+        
+        Args:
+            response (dict[str, str]): The response to check for an error
+            exception_handler (Exception): The exception to raise if the response contains an error
+        """
         if "error" in response:
             print(f"Failed to do action due to error: {response['error']['message']}")
             raise exception_handler()
@@ -265,6 +272,14 @@ class Post:
         pass
 
     def unequip(self, character_name: str, data) -> Character:
+        """Unequip an item from the given slot.
+        
+        Args:
+            character_name (str): The name of the character to unequip an item from
+            data (str): The name of the slot to unequip from
+        Returns:
+            Character: The character object with updated data
+        """
         slot = {"slot": data}
         response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/unequip", slot)
         self.__error_handler(response, UnequipError)
@@ -275,6 +290,13 @@ class Post:
 
     # Task-related
     def accept_task(self):
+        """Accept a task if one is available.
+        
+        If a task is available, this will accept the task and update the character's data.
+        
+        Returns:
+            Character: The character object with updated data
+        """
         response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/task/new")
         self.__error_handler(response, AcceptTaskError)
         character_data: dict = response["data"]["character"]
@@ -282,6 +304,13 @@ class Post:
         return character
 
     def complete_task(self):
+        """Complete the current task if one is available.
+        
+        If a task is available, this will complete the task and update the character's data.
+        
+        Returns:
+            Character: The character object with updated data
+        """
         response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/task/complete")
         self.__error_handler(response, CompleteTaskError)
         character_data: dict = response["data"]["character"]
@@ -289,6 +318,13 @@ class Post:
         return character
 
     def cancel_task(self):
+        """Cancel the current task if one is available.
+        
+        If a task is available, this will cancel the task and update the character's data.
+        
+        Returns:
+            Character: The character object with updated data
+        """
         response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/task/cancel")
         self.__error_handler(response, CancelTaskError)
         character_data: dict = response["data"]["character"]
@@ -333,7 +369,11 @@ class Post:
         pass
 
     def buy_expansion(self):
-        # /my/{name}/action/bank/buy_expansion
+        """Buys an expansion in the bank.
+
+        Returns:
+            Character: The updated character object
+        """
         response: dict[str, dict] = self.send_request.post(f"/my/{character_name}/action/bank/buy_expansion")
         self.__error_handler(response, BuyExpansionError)
         character_data: dict = response["data"]["character"]
