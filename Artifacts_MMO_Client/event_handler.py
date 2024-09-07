@@ -38,9 +38,9 @@ class EventHandler:
                     elif event.key == pygame.K_w:
                         self.controller.unequip("weapon")
                     
+                    pygame.display.flip()
                     return "Update render"
 
-                    pygame.display.flip()
                 else:
                     print(f"Unable to perform action, character in cooldown for {self.game_state.character_data.is_cooldown_active()}s")
 

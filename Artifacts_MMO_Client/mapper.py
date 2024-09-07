@@ -138,13 +138,20 @@ class Game:
         self.draw_grid(self.grid)
     
     def run(self) -> None:
+        # Initial map rendering
         self.update_render()
+
+        # Gameplay loop
         running: bool = True
         while running:
+            # Checks for events
             event_handling = self.event_handler.handle_events()
+
+            # Updates rendered map if an event has taken place
             if event_handling == "Update render":
                 self.update_render()
             else:
+                # Stops the loop and closes the window when event handler returns False
                 running = event_handling
             pygame.display.flip()
             pygame.time.Clock().tick(60)
