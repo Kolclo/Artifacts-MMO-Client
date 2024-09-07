@@ -117,7 +117,7 @@ class Game:
         # Draws character on top of grid
         self.character_sprite.draw(self.window)
 
-    def run(self) -> None:
+    def setup(self) -> None:
         """Main game loop.
 
         This method will load all maps from the API, create a grid of the correct size, load the images for each tile on the map, and map each tile to its corresponding image.
@@ -129,18 +129,25 @@ class Game:
         self.window = PygameUtils.pygame_init(self.window_width, self.window_height, "ArtifactsMMO - World", self.icon)
         self.pygame_utils.play_music(self.music)
 
-        images: dict = self.load_images(map_data)
-        grid: list = self.create_grid(self.map_tile_length, self.map_tile_height)
-        self.map_tiles_to_images(map_data, images, grid)
-
+        self.images: dict = self.load_images(map_data)
+        self.grid: list = self.create_grid(self.map_tile_length, self.map_tile_height)
+        self.map_tiles_to_images(map_data, self.images, self.grid)
+    
+    def update_render(self) -> None:
+        self.character_sprite.x, self.character_sprite.y = self.game_state.character_data.x + 5, self.game_state.character_data.y + 5
+        self.draw_grid(self.grid)
+    
+    def run(self) -> None:
+        self.update_render()
         running: bool = True
         while running:
-            running = self.event_handler.handle_events()
-            self.character_sprite.x, self.character_sprite.y = self.game_state.character_data.x + 5, self.game_state.character_data.y + 5
-            self.draw_grid(grid)
+            event_handling = self.event_handler.handle_events()
+            if event_handling == "Update render":
+                self.update_render()
+            else:
+                running = event_handling
             pygame.display.flip()
             pygame.time.Clock().tick(60)
-
         pygame.quit()
 
 if __name__ == "__main__":

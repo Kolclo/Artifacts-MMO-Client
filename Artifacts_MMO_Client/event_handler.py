@@ -37,6 +37,8 @@ class EventHandler:
                         self.controller.perform_action()
                     elif event.key == pygame.K_w:
                         self.controller.unequip("weapon")
+                    
+                    return "Update render"
 
                     pygame.display.flip()
                 else:

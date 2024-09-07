@@ -32,6 +32,7 @@ def main() -> None:
 
     if selected_character:
         game: Game = Game(game_data)
+        game.setup()
         game.run()
 
         sys.exit()
