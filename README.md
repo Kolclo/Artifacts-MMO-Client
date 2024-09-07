@@ -87,6 +87,7 @@ Render an interactive and dynamic map
 - [x] Button press should trigger movement/action
 - [ ] Subsequent presses should be stored (for movement) 
 - [ ] When cooldown has ended, add total subsequent presses and move that much. (eg. 4x up, 3x left, and 1x down would move the character to the tile that is 3 up and 3 left in one move)
+- [ ] Stop user from trying to leave the map
 
 ### Inventory
 Add support for inventory usage/management
@@ -123,3 +124,5 @@ Prompt user to select a character to control
 
 separate gamestate from character and mapper
 make cooldown check into reusable function
+
+make a battle simulator - use rock music - shows the player beating or dying to the enemy monster

@@ -14,7 +14,7 @@ class CharacterSprite:
         self.x: int = self.game_state.character_data.x + 5
         self.y: int = self.game_state.character_data.y + 5
         self.skin: str = self.game_state.character_data.skin
-        self.sprite: pygame.surface.Surface = pygame.image.load(f"Artifacts_MMO_Client/resources/{self.skin}.png")
+        self.sprite: pygame.surface.Surface = pygame.image.load(f"Artifacts_MMO_Client/resources/characters/{self.skin}.png")
         self.sprite = pygame.transform.scale(self.sprite, (40, 50))
 
     def draw(self, window: pygame.surface.Surface) -> None:
@@ -42,7 +42,7 @@ class Game:
         self.controller: CharacterController = CharacterController(game_state)
         self.get_request = Get()
         self.event_handler: EventHandler = EventHandler(self.game_state)
-        self.icon: pygame.Surface = pygame.image.load("Artifacts_MMO_Client/resources/icon1.png")
+        self.icon: pygame.Surface = pygame.image.load("Artifacts_MMO_Client/resources/window/icon1.png")
         self.music: str = "Artifacts_MMO_Client/resources/music/mapper1.wav"
 
     def load_images(self, data: list[dict[str, str | int]]) -> dict:
@@ -57,7 +57,7 @@ class Game:
         images = {}
         for tile in data:
             skin = tile["skin"]
-            image_path = f"Artifacts_MMO_Client/resources/{skin}.png"
+            image_path = f"Artifacts_MMO_Client/resources/tiles/{skin}.png"
 
             try:
                 images[skin] = pygame.image.load(image_path)

@@ -14,14 +14,14 @@ class CharacterSelector:
         self.WHITE: tuple[int, int, int] = (255, 255, 255)
         self.BLACK: tuple[int, int, int] = (0, 0, 0)
         self.FONT_SIZE: int = 48
-        self.FONT_MACONDO_LOCATION: str = "Artifacts_MMO_Client/resources/Macondo-Regular.ttf"
-        self.icon: pygame.Surface = pygame.image.load("Artifacts_MMO_Client/resources/icon1.png")
+        self.FONT_MACONDO_LOCATION: str = "Artifacts_MMO_Client/resources/window/Macondo-Regular.ttf"
+        self.icon: pygame.Surface = pygame.image.load("Artifacts_MMO_Client/resources/window/icon1.png")
         self.window_name: str = "ArtifactsMMO - Character Selection"
         self.window = PygameUtils.pygame_init(self.WINDOW_WIDTH, self.WINDOW_HEIGHT, self.window_name, self.icon)
         self.font: pygame.font.Font = pygame.font.Font(self.FONT_MACONDO_LOCATION, self.FONT_SIZE)
         self.music: str = "Artifacts_MMO_Client/resources/music/character_selection2.wav"
 
-        self.background_image: str = "Artifacts_MMO_Client/resources/character_selection.png"
+        self.background_image: str = "Artifacts_MMO_Client/resources/window/character_selection.png"
         self.background_x: int = 0
         self.background_y: int = 0
 
@@ -56,7 +56,7 @@ class CharacterSelector:
             # Load the character image
             try:
                 image_name: str = character.skin
-                image: pygame.Surface = pygame.image.load(f"Artifacts_MMO_Client/resources/{image_name}.png")
+                image: pygame.Surface = pygame.image.load(f"Artifacts_MMO_Client/resources/characters/{image_name}.png")
                 image: pygame.Surface = pygame.transform.scale(image, (100, 121))
             except pygame.error as e:
                 print(f"Error loading character image {image_name}: {e}")
