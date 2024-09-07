@@ -1,5 +1,6 @@
 from credentials import api_token
 import requests
+from requests.exceptions import JSONDecodeError
 
 
 class SendRequest:
@@ -39,7 +40,11 @@ class SendRequest:
             params=params
         )
 
-        return response.json()
+        try:
+            json_response = response.json()
+            return json_response
+        except JSONDecodeError:
+            return response
 
     def post(self, endpoint: str, data: dict[str, str] = {}) -> dict[str, str]:
         """Makes a POST request to the given endpoint.

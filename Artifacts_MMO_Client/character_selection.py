@@ -19,7 +19,7 @@ class CharacterSelector:
         self.window_name: str = "ArtifactsMMO - Character Selection"
         self.window = PygameUtils.pygame_init(self.WINDOW_WIDTH, self.WINDOW_HEIGHT, self.window_name, self.icon)
         self.font: pygame.font.Font = pygame.font.Font(self.FONT_MACONDO_LOCATION, self.FONT_SIZE)
-        self.music: str = "Artifacts_MMO_Client/resources/music/character_selection1.wav"
+        self.music: str = "Artifacts_MMO_Client/resources/music/character_selection2.wav"
 
         self.background_image: str = "Artifacts_MMO_Client/resources/character_selection.png"
         self.background_x: int = 0
@@ -92,6 +92,7 @@ class CharacterSelector:
                     for i, (button, image_rect) in enumerate(zip(self.buttons, self.image_rects)):
                         if button.collidepoint(event.pos) or image_rect.collidepoint(event.pos):
                             # User clicked on a character button or image
+                            self.pygame_utils.stop_music()
                             selected_character: Character = self.characters[i]
                             return selected_character
 

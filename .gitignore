@@ -11,6 +11,7 @@ notes.txt
 __pycache__/
 *.py[cod]
 *$py.class
+unused/
 
 # C extensions
 *.so

@@ -43,6 +43,7 @@ class Game:
         self.get_request = Get()
         self.event_handler: EventHandler = EventHandler(self.game_state)
         self.icon: pygame.Surface = pygame.image.load("Artifacts_MMO_Client/resources/icon1.png")
+        self.music: str = "Artifacts_MMO_Client/resources/music/mapper1.wav"
 
     def load_images(self, data: list[dict[str, str | int]]) -> dict:
         """Loads and scales each tiles resources
@@ -126,6 +127,7 @@ class Game:
         map_data: list[dict[str, str | int]] = self.get_request.all_maps()
 
         self.window = PygameUtils.pygame_init(self.window_width, self.window_height, "ArtifactsMMO - World", self.icon)
+        self.pygame_utils.play_music(self.music)
 
         images: dict = self.load_images(map_data)
         grid: list = self.create_grid(self.map_tile_length, self.map_tile_height)

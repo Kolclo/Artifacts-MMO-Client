@@ -15,11 +15,15 @@ class PygameUtils:
 
         return window
 
-    def play_music(self, music_location):
+    def play_music(self, music_location: str, volume: int = 0.5, loops: int = -1):
         pygame.mixer.init()
         try:
             music: pygame.mixer.Sound = pygame.mixer.Sound(music_location)
-            music.set_volume(0.5)  # Set the volume to 50%
-            music.play(-1)  # Play the music in a loop
+            music.set_volume(volume)  # Set the volume to 50%
+            music.play(loops)  # Play the music in a loop
         except pygame.error as e:
             print(f"Error loading background music: {e}")
+    
+    def stop_music(self):
+        """Stops the currently playing music"""
+        pygame.mixer.quit()

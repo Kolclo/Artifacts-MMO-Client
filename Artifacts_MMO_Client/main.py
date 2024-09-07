@@ -18,11 +18,7 @@ def main() -> None:
     get_request: Get = Get()
 
     # Checks whether server is online
-    server_status = get_request.server_status()
-    if not server_status["status"] == "online":
-        print("Server is offline. Please try again later.")
-        sys.exit()
-    print("Server is online! Continuing game initialisation.")
+    get_request.server_status()
 
     # Initiates character selection menu
     character_selector: CharacterSelector = CharacterSelector()

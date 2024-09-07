@@ -4,6 +4,7 @@ from data.resource import Resource
 from data.character import Character
 from data.map import Map
 import time
+import sys
 
 
 # Custom Errors
@@ -79,8 +80,18 @@ class Get:
         Returns:
             Server status (dict[str, str | int]): Server status data
         """
-        response: dict[str, str | int] = self.send_request.get("/")
-        return response["data"]
+        status: dict[str, str | int] = self.send_request.get("/")
+        try:
+            print(status)
+            if not status["data"]["status"] == "online":
+                print("Server is offline. Please try again later.")
+                sys.exit()
+            print("Server is online! Continuing game initialisation.")
+            return status
+        except Exception as e:
+            print(f"Failed to get server status.")
+            sys.exit()
+        
     
     def resource(self, resource_name: str) -> Resource:
         """Get details of a resource by name.

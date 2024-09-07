@@ -99,7 +99,7 @@ class Character:
             f"inventory={self.inventory}, inventory_slots={self.inventory_slots})"
         )
 
-    def is_cooldown_active(self) -> str:
+    def is_cooldown_active(self) -> bool:
         current_time = datetime.now()
         cooldown_diff = (
             self.cooldown_expiration - current_time.astimezone()

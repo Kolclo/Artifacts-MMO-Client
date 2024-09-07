@@ -79,6 +79,20 @@ class CharacterController:
 
         print(f"Character moved to ({new_location.x}, {new_location.y})")
         return new_location
+    
+    def out_of_bounds_check(self, location: Vector2) -> Vector2:
+        """Check if the given location is out of bounds.
+
+        Args:
+            location (Vector2): The location to check
+
+        Returns:
+            new_location (Vector2): The new location of the character
+        """
+        if location.x < -5 or location.x > 12 and location.y < 5 or location.y > 16:
+            return True
+        else:
+            return False
 
     def get_character_location(self) -> Vector2:
         """Get the current location of the character.
@@ -98,9 +112,13 @@ class CharacterController:
         """
         if self.character_location is None:
             self.character_location = self.get_character_location()
-        new_location = self.move_character(self.character_location + self.UP)
-        if new_location:
-            self.character_location = new_location
+        desired_location = self.character_location + self.UP
+        if self.out_of_bounds_check(desired_location):
+            print("You cannot move outside of the map.")
+        else:
+            new_location = self.move_character(desired_location)
+            if new_location:
+                self.character_location = new_location
 
     def move_down(self) -> None:
         """Move the character down by one tile.
@@ -110,9 +128,13 @@ class CharacterController:
         """
         if self.character_location is None:
             self.character_location = self.get_character_location()
-        new_location = self.move_character(self.character_location + self.DOWN)
-        if new_location:
-            self.character_location = new_location
+        desired_location = self.character_location + self.DOWN
+        if self.out_of_bounds_check(desired_location):
+            print("You cannot move outside of the map.")
+        else:
+            new_location = self.move_character(desired_location)
+            if new_location:
+                self.character_location = new_location
 
     def move_left(self) -> None:
         """Move the character left by one tile.
@@ -122,9 +144,13 @@ class CharacterController:
         """
         if self.character_location is None:
             self.character_location = self.get_character_location()
-        new_location = self.move_character(self.character_location + self.LEFT)
-        if new_location:
-            self.character_location = new_location
+        desired_location = self.character_location + self.LEFT
+        if self.out_of_bounds_check(desired_location):
+            print("You cannot move outside of the map.")
+        else:
+            new_location = self.move_character(desired_location)
+            if new_location:
+                self.character_location = new_location
 
     def move_right(self) -> None:
         """Move the character right by one tile.
@@ -134,9 +160,13 @@ class CharacterController:
         """
         if self.character_location is None:
             self.character_location = self.get_character_location()
-        new_location = self.move_character(self.character_location + self.RIGHT)
-        if new_location:
-            self.character_location = new_location
+        desired_location = self.character_location + self.RIGHT
+        if self.out_of_bounds_check(desired_location):
+            print("You cannot move outside of the map.")
+        else:
+            new_location = self.move_character(desired_location)
+            if new_location:
+                self.character_location = new_location
     
     def perform_action(self) -> Character:
         """Check the current tile that the character is on and perform an action on it if appropriate.
