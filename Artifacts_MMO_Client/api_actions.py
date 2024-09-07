@@ -115,7 +115,7 @@ class Get:
         Returns:
             Monster: Monster object with the given name and details
         """
-        response: dict[str, str | int] = self.send_request.get(f"/resources/{monster_name}")
+        response: dict[str, str | int] = self.send_request.get(f"/monsters/{monster_name}")
         self.__error_handler(response, GetMonsterError)
         return Monster(response["data"])
 
