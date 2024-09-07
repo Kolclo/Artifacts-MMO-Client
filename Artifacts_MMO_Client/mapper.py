@@ -7,6 +7,7 @@ from controller import CharacterController
 from game_state import GameState
 from pygame_util import PygameUtils
 from event_handler import EventHandler
+from data.options import Options
 
 class CharacterSprite:
     def __init__(self, game_state) -> None:
@@ -29,7 +30,7 @@ class CharacterSprite:
         window.blit(self.sprite, (self.x * 65 + offset_x, self.y * 65 + offset_y))
 
 class Game:
-    def __init__(self, game_state):
+    def __init__(self, game_state, volume_settings):
         self.map_tile_length: int = 17
         self.map_tile_height: int = 21
         self.tile_size: int = 65
@@ -44,6 +45,8 @@ class Game:
         self.event_handler: EventHandler = EventHandler(self.game_state)
         self.icon: pygame.Surface = pygame.image.load("Artifacts_MMO_Client/resources/window/icon1.png")
         self.music: str = "Artifacts_MMO_Client/resources/music/mapper1.wav"
+
+        self.volume_settings: Options = volume_settings
 
     def load_images(self, data: list[dict[str, str | int]]) -> dict:
         """Loads and scales each tiles resources
@@ -127,7 +130,7 @@ class Game:
         map_data: list[dict[str, str | int]] = self.get_request.all_maps()
 
         self.window = PygameUtils.pygame_init(self.window_width, self.window_height, "ArtifactsMMO - World", self.icon)
-        self.pygame_utils.play_music(self.music)
+        self.pygame_utils.play_music(self.music, self.volume_settings.music_volume)
 
         self.images: dict = self.load_images(map_data)
         self.grid: list = self.create_grid(self.map_tile_length, self.map_tile_height)
@@ -138,6 +141,9 @@ class Game:
         self.draw_grid(self.grid)
     
     def run(self) -> None:
+        # Initial setup
+        self.setup()
+
         # Initial map rendering
         self.update_render()
 

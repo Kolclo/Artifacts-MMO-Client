@@ -23,7 +23,8 @@ setuptools.setup(
     install_requires=[
         "requests==2.32.3", 
         "pytest==8.3.2",
-        "pygame==2.6.0"
+        "pygame==2.6.0",
+        "pygame_gui==0.6.12"
         ],
     classifiers=[
         "Programming Language :: Python :: 3",

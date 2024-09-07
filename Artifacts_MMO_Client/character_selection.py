@@ -80,7 +80,6 @@ class CharacterSelector:
         """
         self.load_background_image()
         self.button_setup()
-        self.pygame_utils.play_music(self.music)
 
         clock: pygame.time.Clock = pygame.time.Clock()
         while True:

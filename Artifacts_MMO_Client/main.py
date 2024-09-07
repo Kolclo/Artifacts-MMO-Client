@@ -1,9 +1,11 @@
+from main_menu import MainMenu
 from character_selection import CharacterSelector
 from data.character import Character
 from data.map import Map
 from mapper import Game
 from api_actions import Get
 from game_state import GameState
+from data.options import Options
 import sys
 
 def main() -> None:
@@ -20,6 +22,15 @@ def main() -> None:
     # Checks whether server is online
     get_request.server_status()
 
+    # Loads user options
+    volume_settings: Options = Options()
+
+    # Initiates main menu
+    main_menu: MainMenu = MainMenu(volume_settings)
+    continue_game = main_menu.run()
+    if not continue_game:
+        sys.exit()
+
     # Initiates character selection menu
     character_selector: CharacterSelector = CharacterSelector()
     selected_character: Character = character_selector.run()
@@ -31,8 +42,7 @@ def main() -> None:
     game_data: GameState = GameState(selected_character, map_data_request)
 
     if selected_character:
-        game: Game = Game(game_data)
-        game.setup()
+        game: Game = Game(game_data, volume_settings)
         game.run()
 
         sys.exit()

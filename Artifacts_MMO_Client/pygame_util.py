@@ -19,8 +19,9 @@ class PygameUtils:
         pygame.mixer.init()
         try:
             music: pygame.mixer.Sound = pygame.mixer.Sound(music_location)
-            music.set_volume(volume)  # Set the volume to 50%
-            music.play(loops)  # Play the music in a loop
+            music.set_volume(volume)
+            music.play(loops)
+            return music
         except pygame.error as e:
             print(f"Error loading background music: {e}")
     
