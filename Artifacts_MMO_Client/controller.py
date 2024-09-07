@@ -55,7 +55,7 @@ class CharacterController:
         self.tile_data: Map = self.game_state.tile_data
         
         self.get_request: Get = Get()
-        self.post_request: Post = Post()
+        self.post_request: Post = Post(game_state)
 
         self.UP: Vector2 = Vector2(0, -1)
         self.DOWN: Vector2 = Vector2(0, 1)
@@ -72,13 +72,13 @@ class CharacterController:
             new_location (Vector2): The new location of the character
         """
         response = self.post_request.move_character(self.character_name, location.x, location.y)
-        new_location = Vector2(response.x, response.y)
-        self.character_location = new_location
-
-        self.game_state.character_data.x, self.game_state.character_data.y = new_location.x, new_location.y
-
-        print(f"Character moved to ({new_location.x}, {new_location.y})")
-        return new_location
+        if response:
+            new_location = Vector2(response.x, response.y)
+            self.character_location = new_location
+            print(f"Character moved to ({new_location.x}, {new_location.y})")
+            return new_location
+        else:
+            return False
     
     def out_of_bounds_check(self, location: Vector2) -> Vector2:
         """Check if the given location is out of bounds.

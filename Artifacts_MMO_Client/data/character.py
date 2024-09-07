@@ -100,7 +100,7 @@ class Character:
             f"inventory={self.inventory}, inventory_slots={self.inventory_slots})"
         )
 
-    def is_cooldown_active(self) -> bool:
+    def is_cooldown_active(self) -> int:
         current_time = datetime.now(timezone.utc)
         cooldown_diff = (self.cooldown_expiration - current_time).total_seconds()
-        return cooldown_diff > 0
+        return cooldown_diff

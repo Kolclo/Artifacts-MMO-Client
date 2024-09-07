@@ -1,9 +1,11 @@
 import pygame
 from controller import CharacterController
+from game_state import GameState
 
 class EventHandler:
     def __init__(self, game_state):
         self.controller: CharacterController = CharacterController(game_state)
+        self.game_state: GameState = game_state
         # self.move_up: int = 0
         # self.move_down: int = 0
         # self.move_left: int = 0
@@ -22,19 +24,22 @@ class EventHandler:
             if event.type == pygame.QUIT:
                 return False
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    self.controller.move_left()
-                elif event.key == pygame.K_RIGHT:
-                    self.controller.move_right()
-                elif event.key == pygame.K_UP:
-                    self.controller.move_up()
-                elif event.key == pygame.K_DOWN:
-                    self.controller.move_down()
-                elif event.key == pygame.K_SPACE:
-                    self.controller.perform_action()
-                elif event.key == pygame.K_w:
-                    self.controller.unequip("weapon")
+                if self.game_state.character_data.is_cooldown_active() < 0:
+                    if event.key == pygame.K_LEFT:
+                        self.controller.move_left()
+                    elif event.key == pygame.K_RIGHT:
+                        self.controller.move_right()
+                    elif event.key == pygame.K_UP:
+                        self.controller.move_up()
+                    elif event.key == pygame.K_DOWN:
+                        self.controller.move_down()
+                    elif event.key == pygame.K_SPACE:
+                        self.controller.perform_action()
+                    elif event.key == pygame.K_w:
+                        self.controller.unequip("weapon")
 
-                pygame.display.flip()
+                    pygame.display.flip()
+                else:
+                    print(f"Unable to perform action, character in cooldown for {self.game_state.character_data.is_cooldown_active()}s")
 
         return True

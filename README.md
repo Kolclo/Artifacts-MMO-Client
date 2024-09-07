@@ -34,7 +34,7 @@ You're good to play!
 ### Actions
 Add support for more actions using APIs
 - [ ] Display cooldown for actions on screen
-- [ ] Move control ability to mapper instead of it's own window
+- [x] Move control ability to mapper instead of it's own window
 
 #### Movement
 - [x] Movement
@@ -44,14 +44,14 @@ Add support for more actions using APIs
 - [ ] Error handling
 
 #### Combat
-- [ ] Combat
+- [x] Combat
 - [x] Create corresponding API actions
 - [x] Sync location after combat is complete
 - [ ] Error handling
 
 #### Gathering
 - [ ] Gathering
-- [ ] Create corresponding API actions
+- [x] Create corresponding API actions
 - [ ] Error handling
 
 #### Crafting
@@ -61,7 +61,7 @@ Add support for more actions using APIs
 
 ### Equip/Unequip
 - [ ] Equip items
-- [ ] Unequip items
+- [ ] Unequip items - in progress
 - [ ] Toggle feature - eg. 'W' will equip or unequip Weapon?
 - [ ] Create corresponding API actions
 - [ ] Error handles
@@ -87,7 +87,7 @@ Render an interactive and dynamic map
 - [x] Button press should trigger movement/action
 - [ ] Subsequent presses should be stored (for movement) 
 - [ ] When cooldown has ended, add total subsequent presses and move that much. (eg. 4x up, 3x left, and 1x down would move the character to the tile that is 3 up and 3 left in one move)
-- [ ] Stop user from trying to leave the map
+- [x] Stop user from trying to leave the map
 
 ### Inventory
 Add support for inventory usage/management
@@ -104,7 +104,7 @@ Improve code consistency and efficiency
 ### Data
 Improve data management via centralisation of data
 - [ ] Move data into GameState class (in progress)
-- [ ] Change all current code to use new GameState class
+- [x] Change all current code to use new GameState class
 
 ### Performance
 Improve performance of client
@@ -120,9 +120,5 @@ Prompt user to select a character to control
 - [x] Get a list of characters from API
 - [x] Display character list to user
 - [x] Allow for character selection
-
-
-separate gamestate from character and mapper
-make cooldown check into reusable function
 
 make a battle simulator - use rock music - shows the player beating or dying to the enemy monster

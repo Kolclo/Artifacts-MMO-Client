@@ -3,7 +3,7 @@ from data.monster import Monster
 from data.resource import Resource
 from data.character import Character
 from data.map import Map
-import time
+from game_state import GameState
 import sys
 
 
@@ -184,12 +184,13 @@ class Get:
         return Character(response["data"])
 
 class Post:
-    def __init__(self, request_client: SendRequest = SendRequest()) -> None:
+    def __init__(self, game_state, request_client: SendRequest = SendRequest()) -> None:
         self.send_request: SendRequest = request_client
+        self.game_state: GameState = game_state
 
     def __error_handler(self, response: dict[str, str], exception_handler: Exception) -> None:
         if "error" in response:
-            print(f"Failed to do action due to error {response['error']['message']}")
+            print(f"Failed to do action due to error: {response['error']['message']}")
             raise exception_handler()
         
 
@@ -205,25 +206,12 @@ class Post:
         Returns:
             Character: The character object with updated data
         """
-        max_retries: str = 3
-        retries: str = 0
-        while retries < max_retries:
-            try:
-                data: dict[str, int] = {"x": position_x, "y": position_y}
-                response: dict[str, dict[str, str | int | list[dict[str, str | int]]]] = self.send_request.post(f"/my/{character_name}/action/move", data)
-                self.__error_handler(response, MoveCharacterError)
-                character_data: dict = response["data"]["character"]
-                character: Character = Character(character_data)
-                return character
-            except MoveCharacterError:
-                retries += 1
-                wait_period: float = float(response['error']['message'].split(': ')[1].split(' ')[0]) + 0.2
-                print(f"Retrying in {wait_period} seconds...")
-                # Wait for cooldown period before trying to move again
-                time.sleep(wait_period)
-        else:
-            print("Failed to move character after {} retries".format(max_retries))
-            raise MoveCharacterError
+        data: dict[str, int] = {"x": position_x, "y": position_y}
+        response: dict[str, dict[str, str | int | list[dict[str, str | int]]]] = self.send_request.post(f"/my/{character_name}/action/move", data)
+        character_data: dict = response["data"]["character"]
+        character: Character = Character(character_data)
+        self.game_state.character_data = character
+        return character
     
     def fight(self, character_name: str) -> Character:
         """Engage in combat with the current monster the character is at.
