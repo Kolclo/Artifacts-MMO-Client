@@ -1,4 +1,5 @@
 from datetime import datetime
+from datetime import timezone
 
 class Character:
     def __init__(self, data: dict[str, str | int]):
@@ -100,8 +101,6 @@ class Character:
         )
 
     def is_cooldown_active(self) -> bool:
-        current_time = datetime.now()
-        cooldown_diff = (
-            self.cooldown_expiration - current_time.astimezone()
-        ).total_seconds()
+        current_time = datetime.now(timezone.utc)
+        cooldown_diff = (self.cooldown_expiration - current_time).total_seconds()
         return cooldown_diff > 0
