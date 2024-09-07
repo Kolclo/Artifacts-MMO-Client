@@ -2,14 +2,14 @@ import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Hides Pygame welcome message
 
 import pygame
-from pygame_util import PygameUtils
+# from pygame_util import PygameUtils
 import sys
 from api_actions import Get
 from data.character import Character
 
 class CharacterSelector:
-    def __init__(self):
-        self.pygame_utils: PygameUtils = PygameUtils()
+    def __init__(self, pygame_utils):
+        self.pygame_utils = pygame_utils
         self.WINDOW_WIDTH, self.WINDOW_HEIGHT = 1200, 1200
         self.WHITE: tuple[int, int, int] = (255, 255, 255)
         self.BLACK: tuple[int, int, int] = (0, 0, 0)
@@ -17,7 +17,7 @@ class CharacterSelector:
         self.FONT_MACONDO_LOCATION: str = "Artifacts_MMO_Client/resources/window/Macondo-Regular.ttf"
         self.icon: pygame.Surface = pygame.image.load("Artifacts_MMO_Client/resources/window/icon1.png")
         self.window_name: str = "ArtifactsMMO - Character Selection"
-        self.window = PygameUtils.pygame_init(self.WINDOW_WIDTH, self.WINDOW_HEIGHT, self.window_name, self.icon)
+        self.window = self.pygame_utils.pygame_init(self.WINDOW_WIDTH, self.WINDOW_HEIGHT, self.window_name, self.icon)
         self.font: pygame.font.Font = pygame.font.Font(self.FONT_MACONDO_LOCATION, self.FONT_SIZE)
         self.music: str = "Artifacts_MMO_Client/resources/music/character_selection2.wav"
 

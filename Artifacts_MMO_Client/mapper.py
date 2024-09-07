@@ -39,9 +39,9 @@ class Game:
         self.game_state: GameState = game_state
         self.character_sprite: CharacterSprite = CharacterSprite(game_state)
         self.character_name: str = self.game_state.character_data.name
-        self.controller: CharacterController = CharacterController(game_state)
+        self.controller: CharacterController = CharacterController(game_state, self.pygame_utils)
         self.get_request = Get()
-        self.event_handler: EventHandler = EventHandler(self.game_state)
+        self.event_handler: EventHandler = EventHandler(self.game_state, self.pygame_utils)
         self.icon: pygame.Surface = pygame.image.load("Artifacts_MMO_Client/resources/window/icon1.png")
         self.music: str = "Artifacts_MMO_Client/resources/music/mapper1.wav"
 
@@ -126,7 +126,7 @@ class Game:
         """
         map_data: list[dict[str, str | int]] = self.get_request.all_maps()
 
-        self.window = PygameUtils.pygame_init(self.window_width, self.window_height, "ArtifactsMMO - World", self.icon)
+        self.window = self.pygame_utils.pygame_init(self.window_width, self.window_height, "ArtifactsMMO - World", self.icon)
         self.pygame_utils.play_music(self.music)
 
         images: dict = self.load_images(map_data)

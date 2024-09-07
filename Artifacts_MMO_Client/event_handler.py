@@ -2,8 +2,8 @@ import pygame
 from controller import CharacterController
 
 class EventHandler:
-    def __init__(self, game_state):
-        self.controller: CharacterController = CharacterController(game_state)
+    def __init__(self, game_state, pygame_utils):
+        self.controller: CharacterController = CharacterController(game_state, pygame_utils)
         # self.move_up: int = 0
         # self.move_down: int = 0
         # self.move_left: int = 0

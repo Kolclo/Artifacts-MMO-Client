@@ -2,6 +2,7 @@ from api_actions import Get, Post
 from data.character import Character
 from game_state import GameState
 from data.map import Map
+from battle_simulator import BattleSimulator
 
 class Vector2:
     def __init__(self, x, y):
@@ -47,7 +48,8 @@ class Vector2:
         return Vector2(self.x - other.x, self.y - other.y)
 
 class CharacterController:
-    def __init__(self, game_state):
+    def __init__(self, game_state, pygame_utils):
+        self.pygame_utils = pygame_utils
         self.game_state: GameState = game_state
         self.character_name: str = self.game_state.character_data.name
         self.endpoint: str = f"my/{self.character_name}/action/move"
@@ -181,6 +183,9 @@ class CharacterController:
         self.game_state.tile_data = updated_tile_data
         tile_type = self.game_state.tile_data.content.type
         if tile_type == "monster":
+            monster = self.get_request.monster("chicken")
+            battle = BattleSimulator(self.game_state.character_data, monster, self.pygame_utils)
+            battle.run()
             response = self.post_request.fight(self.character_name)
             print(f"Character attacked monster")
             self.game_state.character_data = response

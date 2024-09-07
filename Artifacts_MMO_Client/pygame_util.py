@@ -1,17 +1,22 @@
 import pygame
 
 class PygameUtils:
-    def pygame_init(window_width, window_height, title, icon):
+    def __init__(self):
+        self.windows = []
+
+    def pygame_init(self, window_width, window_height, title, icon):
         """Initializes the pygame window with the correct size and title.
 
         window_width and window_height are used to set the size of the window.
         The window is given the provided title.
         """
 
-        pygame.init()
         window: pygame.surface.Surface = pygame.display.set_mode((window_width, window_height))
         pygame.display.set_caption(title)
         pygame.display.set_icon(icon)
+
+        self.windows.append(window)
+        print(self.windows)
 
         return window
 
