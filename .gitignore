@@ -3,15 +3,16 @@ credentials.py
 python_artifacts.log
 notes.txt
 *.old
-
+unused/
 *.psd
 *.DS_Store
+saved_user_options.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-unused/
+
 
 # C extensions
 *.so
