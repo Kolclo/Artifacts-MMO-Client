@@ -70,6 +70,63 @@ class CharacterSelector:
             # Initialize the scale to 1.0 (no scaling) and velocity to 0.0
             self.scales.append(1.0)
             self.velocities.append(0.01) 
+        
+    def update_background_location(self):
+        # Create a larger background surface
+        background_surface: pygame.Surface = pygame.Surface((self.WINDOW_WIDTH * 2, self.WINDOW_HEIGHT * 4))
+
+        # Draw the background image onto the surface
+        for i in range(2):
+            for j in range(4):
+                background_surface.blit(self.background_image, (self.background_x + (i * self.WINDOW_WIDTH * 1.5), self.background_y + (j * self.WINDOW_HEIGHT * 1.5)))
+
+        # Draw the background surface onto the screen
+        self.window.blit(background_surface, (0, 0))
+
+        # Update the position of the background image
+        self.background_x -= 1.5
+        self.background_y -= 1
+
+        # Check if the background has scrolled two screens
+        if self.background_y < -self.WINDOW_HEIGHT * 2:
+            self.background_y = -self.WINDOW_HEIGHT/2  # Reset y-position
+        if self.background_x < -self.WINDOW_WIDTH * 2:
+            self.background_x = -self.WINDOW_WIDTH/2  # Reset x-position
+    
+    def draw_character_buttons(self):
+        # Draw the character buttons
+        for i, (button, image, image_rect, scale, velocity) in enumerate(zip(self.buttons, self.images, self.image_rects, self.scales, self.velocities)):
+            # Create a surface with a transparent background
+            circle_surface: pygame.Surface = pygame.Surface((200, 200), pygame.SRCALPHA)
+            circle_surface.fill((0, 0, 0, 0))
+
+            # Draw a circle on the surface
+            pygame.draw.circle(circle_surface, (255, 255, 255, 128), (100, 100), 100)
+
+            # Blit the circle surface onto the screen
+            self.window.blit(circle_surface, (button.centerx - 100, button.centery - 150))
+
+            text: pygame.Surface = self.font.render(self.characters[i].name, True, self.BLACK)
+            text_rect: pygame.Rect = text.get_rect(center=button.center)
+            self.window.blit(text, text_rect)
+
+            # Update the scale based on hover state
+            if image_rect.collidepoint(pygame.mouse.get_pos()):
+                # Update the scale based on velocity
+                self.scales[i] += self.velocities[i]
+                if self.scales[i] > 1.2:
+                    self.velocities[i] = -self.velocities[i]
+                elif self.scales[i] < 1.0:
+                    self.velocities[i] = -self.velocities[i]
+            else:
+                # Reset the scale and velocity when not hovered
+                self.scales[i] = 1.0
+                self.velocities[i] = 0.01
+
+            # Draw the character image with the updated scale
+            scaled_image: pygame.Surface = pygame.transform.scale(image, (int(100 * scale), int(121 * scale)))
+            scaled_image_rect: pygame.Rect = scaled_image.get_rect(center=image_rect.center)
+            self.window.blit(scaled_image, scaled_image_rect)
     
     def run(self):
         """Displays a character selection screen with a scrolling background, character images with names, and hover effects using Pygame.
@@ -94,60 +151,8 @@ class CharacterSelector:
                             selected_character: Character = self.characters[i]
                             return selected_character
 
-            # Create a larger background surface
-            background_surface: pygame.Surface = pygame.Surface((self.WINDOW_WIDTH * 2, self.WINDOW_HEIGHT * 4))
-
-            # Draw the background image onto the surface
-            for i in range(2):
-                for j in range(4):
-                    background_surface.blit(self.background_image, (self.background_x + (i * self.WINDOW_WIDTH * 1.5), self.background_y + (j * self.WINDOW_HEIGHT * 1.5)))
-
-            # Draw the background surface onto the screen
-            self.window.blit(background_surface, (0, 0))
-
-            # Update the position of the background image
-            self.background_x -= 1.5
-            self.background_y -= 1
-
-            # Check if the background has scrolled two screens
-            if self.background_y < -self.WINDOW_HEIGHT * 2:
-                self.background_y = -self.WINDOW_HEIGHT/2  # Reset y-position
-            if self.background_x < -self.WINDOW_WIDTH * 2:
-                self.background_x = -self.WINDOW_WIDTH/2  # Reset x-position
-
-            # Draw the character buttons
-            for i, (button, image, image_rect, scale, velocity) in enumerate(zip(self.buttons, self.images, self.image_rects, self.scales, self.velocities)):
-                # Create a surface with a transparent background
-                circle_surface: pygame.Surface = pygame.Surface((200, 200), pygame.SRCALPHA)
-                circle_surface.fill((0, 0, 0, 0))
-
-                # Draw a circle on the surface
-                pygame.draw.circle(circle_surface, (255, 255, 255, 128), (100, 100), 100)
-
-                # Blit the circle surface onto the screen
-                self.window.blit(circle_surface, (button.centerx - 100, button.centery - 150))
-
-                text: pygame.Surface = self.font.render(self.characters[i].name, True, self.BLACK)
-                text_rect: pygame.Rect = text.get_rect(center=button.center)
-                self.window.blit(text, text_rect)
-
-                # Update the scale based on hover state
-                if image_rect.collidepoint(pygame.mouse.get_pos()):
-                    # Update the scale based on velocity
-                    self.scales[i] += self.velocities[i]
-                    if self.scales[i] > 1.2:
-                        self.velocities[i] = -self.velocities[i]
-                    elif self.scales[i] < 1.0:
-                        self.velocities[i] = -self.velocities[i]
-                else:
-                    # Reset the scale and velocity when not hovered
-                    self.scales[i] = 1.0
-                    self.velocities[i] = 0.01
-
-                # Draw the character image with the updated scale
-                scaled_image: pygame.Surface = pygame.transform.scale(image, (int(100 * scale), int(121 * scale)))
-                scaled_image_rect: pygame.Rect = scaled_image.get_rect(center=image_rect.center)
-                self.window.blit(scaled_image, scaled_image_rect)
+            self.update_background_location()
+            self.draw_character_buttons()
 
             # Update the display
             pygame.display.flip()
