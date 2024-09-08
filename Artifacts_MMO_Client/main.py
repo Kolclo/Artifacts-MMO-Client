@@ -32,7 +32,7 @@ def main() -> None:
         sys.exit()
 
     # Initiates character selection menu
-    character_selector: CharacterSelector = CharacterSelector()
+    character_selector: CharacterSelector = CharacterSelector(settings)
     selected_character: Character = character_selector.run()
 
     # Gets chosen character's current tile data

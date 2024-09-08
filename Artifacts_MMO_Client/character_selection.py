@@ -6,31 +6,33 @@ from pygame_util import PygameUtils
 import sys
 from api_actions import Get
 from data.character import Character
+import pygame_gui
+from data.options import Options
 
 class CharacterSelector:
-    def __init__(self):
+    def __init__(self, settings):
         self.pygame_utils: PygameUtils = PygameUtils()
+        self.get_request: Get = Get()
         self.WINDOW_WIDTH, self.WINDOW_HEIGHT = 1024, 1024
         self.WHITE: tuple[int, int, int] = (255, 255, 255)
         self.BLACK: tuple[int, int, int] = (0, 0, 0)
-        self.FONT_SIZE: int = 48
-        self.FONT_MACONDO_LOCATION: str = "Artifacts_MMO_Client/resources/window/Macondo-Regular.ttf"
         self.icon: pygame.Surface = pygame.image.load("Artifacts_MMO_Client/resources/window/icon1.png")
         self.window_name: str = "ArtifactsMMO - Character Selection"
         self.window = PygameUtils.pygame_init(self.WINDOW_WIDTH, self.WINDOW_HEIGHT, self.window_name, self.icon)
-        self.font: pygame.font.Font = pygame.font.Font(self.FONT_MACONDO_LOCATION, self.FONT_SIZE)
 
         self.background_image: str = "Artifacts_MMO_Client/resources/window/character_selection.png"
         self.background_x: int = 0
         self.background_y: int = 0
 
-        self.get_request: Get = Get()
+        self.gui_styles = "Artifacts_MMO_Client/resources/window/character_selection.json"
+        self.gui_manager = pygame_gui.UIManager((self.WINDOW_WIDTH, self.WINDOW_HEIGHT), self.gui_styles)
+
+        self.button_sound: str = "Artifacts_MMO_Client/resources/music/button_press.wav"
 
         self.characters: list[Character] = self.get_request.characters()
 
-        self.num_buttons: int = len(self.characters)
-        self.button_height: int = 40
-        self.spacing: int = (self.WINDOW_HEIGHT - (self.num_buttons * (self.button_height + 50))) // (self.num_buttons + 1)
+        self.settings: Options = settings
+        
     
     def load_background_image(self):
         try:
@@ -41,36 +43,6 @@ class CharacterSelector:
             pygame.quit()
             sys.exit()
     
-    def button_setup(self):
-        self.buttons: list[pygame.Rect] = []
-        self.images: list[pygame.Surface] = []
-        self.image_rects: list[pygame.Rect] = []
-        self.scales: list[float] = []
-        self.velocities: list[float] = []
-        for i, character in enumerate(self.characters):
-            y: int = self.spacing + (i * (self.button_height + 50 + self.spacing))
-            button: pygame.Rect = pygame.Rect(self.WINDOW_WIDTH // 2 - 100, y + 50, 200, self.button_height)
-            self.buttons.append(button)
-
-            # Load the character image
-            try:
-                image_name: str = character.skin
-                image: pygame.Surface = pygame.image.load(f"Artifacts_MMO_Client/resources/characters/{image_name}.png")
-                image: pygame.Surface = pygame.transform.scale(image, (100, 121))
-            except pygame.error as e:
-                print(f"Error loading character image {image_name}: {e}")
-                pygame.quit()
-                sys.exit()
-            self.images.append(image)
-
-            # Create a rect for the image
-            image_rect: pygame.Rect = image.get_rect(center=(button.centerx, button.top - 50))
-            self.image_rects.append(image_rect)
-
-            # Initialize the scale to 1.0 (no scaling) and velocity to 0.0
-            self.scales.append(1.0)
-            self.velocities.append(0.01) 
-        
     def update_background_location(self):
         # Create a larger background surface
         background_surface: pygame.Surface = pygame.Surface((self.WINDOW_WIDTH * 2, self.WINDOW_HEIGHT * 4))
@@ -93,67 +65,86 @@ class CharacterSelector:
         if self.background_x < -self.WINDOW_WIDTH * 2:
             self.background_x = -self.WINDOW_WIDTH/2  # Reset x-position
     
-    def draw_character_buttons(self):
-        # Draw the character buttons
-        for i, (button, image, image_rect, scale, velocity) in enumerate(zip(self.buttons, self.images, self.image_rects, self.scales, self.velocities)):
-            # Create a surface with a transparent background
-            circle_surface: pygame.Surface = pygame.Surface((200, 200), pygame.SRCALPHA)
-            circle_surface.fill((0, 0, 0, 0))
-
-            # Draw a circle on the surface
-            pygame.draw.circle(circle_surface, (255, 255, 255, 128), (100, 100), 100)
-
-            # Blit the circle surface onto the screen
-            self.window.blit(circle_surface, (button.centerx - 100, button.centery - 150))
-
-            text: pygame.Surface = self.font.render(self.characters[i].name, True, self.BLACK)
-            text_rect: pygame.Rect = text.get_rect(center=button.center)
-            self.window.blit(text, text_rect)
-
-            # Update the scale based on hover state
-            if image_rect.collidepoint(pygame.mouse.get_pos()):
-                # Update the scale based on velocity
-                self.scales[i] += self.velocities[i]
-                if self.scales[i] > 1.2:
-                    self.velocities[i] = -self.velocities[i]
-                elif self.scales[i] < 1.0:
-                    self.velocities[i] = -self.velocities[i]
-            else:
-                # Reset the scale and velocity when not hovered
-                self.scales[i] = 1.0
-                self.velocities[i] = 0.01
-
-            # Draw the character image with the updated scale
-            scaled_image: pygame.Surface = pygame.transform.scale(image, (int(100 * scale), int(121 * scale)))
-            scaled_image_rect: pygame.Rect = scaled_image.get_rect(center=image_rect.center)
-            self.window.blit(scaled_image, scaled_image_rect)
+    def center_ui_element(self, width, height, y_offset = 0, x_offset = 0):
+        x = (self.WINDOW_WIDTH - width) // 2
+        y = (self.WINDOW_HEIGHT - height) // 2
+        return pygame.Rect((x - x_offset, y - y_offset), (width, height))
     
-    def run(self):
-        """Displays a character selection screen with a scrolling background, character images with names, and hover effects using Pygame.
+    def create_character_buttons(self) -> list[pygame_gui.elements.UIPanel]:
+        """Creates a list of character buttons with images and names.
 
         Returns:
-            Character: The selected character
+            list[pygame_gui.elements.UIPanel]: List of UI Panels for the character buttons
         """
-        self.load_background_image()
-        self.button_setup()
+        button_width: int = 400
+        button_height: int = 150
+        x_gap: int = 20
+        y_gap: int = 60
+        y_offset: int = 150
 
-        clock: pygame.time.Clock = pygame.time.Clock()
-        while True:
+        images: list[pygame.Surface] = [pygame.image.load(f"Artifacts_MMO_Client/resources/characters/{character.skin}.png").convert_alpha() for character in self.characters]
+
+        button_list: list[pygame_gui.elements.UIPanel] = []
+        self.character_buttons_dict = {}  # Dictionary to store buttons and their corresponding characters
+
+        # Calculate the x position of the leftmost button
+        x_offset: int = (900 - (button_width * 2 + x_gap)) // 2
+
+        for i in range(len(self.characters)):
+            x: int = x_offset + (i % 2) * (button_width + x_gap)
+            y: int = (900 - button_height) // 2 + (i // 2) * (button_height + y_gap) - y_offset
+
+            # Create a panel for the button and image
+            panel: pygame_gui.elements.UIPanel = pygame_gui.elements.UIPanel(relative_rect=pygame.Rect((x, y), (button_width, button_height)), manager=self.gui_manager, container=self.button_background)
+
+            # Create the image element and add it to the panel
+            pygame_gui.elements.UIImage(relative_rect=pygame.Rect((10, (button_height - 100) // 2), (80, 100)), image_surface=images[i], manager=self.gui_manager, container=panel)
+
+            # Create the button element and add it to the panel
+            button: pygame_gui.elements.UIButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((100, 10), (button_width - 110, button_height - 20)), text=self.characters[i].name, manager=self.gui_manager, container=panel)
+            self.character_buttons_dict[button] = self.characters[i]  # Store the button and its corresponding character
+            button_list.append(panel)
+
+        return button_list
+
+
+    def setup(self):
+        self.load_background_image()
+        self.button_background = pygame_gui.elements.UIWindow(rect=self.center_ui_element(900, 900), manager=self.gui_manager, draggable=False)
+        self.character_buttons = self.create_character_buttons()
+        title_rect = pygame.Rect(((900 - 800) // 2 - 0, (900 - 150) // 2 - 325), (800, 150))
+        self.title_text = pygame_gui.elements.UITextBox("<u>Choose Your Character</u>", relative_rect=title_rect, container=self.button_background, manager=self.gui_manager)
+
+    def run(self):
+        clock = pygame.time.Clock()
+        self.setup()
+        running = True
+
+        while running:
+            time_delta = clock.tick(60)/1000.0
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    for i, (button, image_rect) in enumerate(zip(self.buttons, self.image_rects)):
-                        if button.collidepoint(event.pos) or image_rect.collidepoint(event.pos):
-                            # User clicked on a character button or image
-                            self.pygame_utils.stop_music()
-                            selected_character: Character = self.characters[i]
-                            return selected_character
-
+                    running = False
+                
+                if event.type == pygame_gui.UI_BUTTON_PRESSED:
+                    self.pygame_utils.play_music(self.button_sound, self.settings.sound_volume, 0)
+                    if event.ui_element in self.character_buttons_dict:
+                        pygame.time.wait(500)
+                        self.pygame_utils.stop_music()
+                        selected_character = self.character_buttons_dict[event.ui_element]
+                        return selected_character
+                        
+                self.gui_manager.process_events(event)
+            
+            self.gui_manager.update(time_delta)
             self.update_background_location()
-            self.draw_character_buttons()
 
-            # Update the display
-            pygame.display.flip()
-            clock.tick(60)
+            self.gui_manager.draw_ui(self.window)
+
+            pygame.display.update()
+        return True
+
+if __name__ == "__main__":
+    settings: Options = Options()
+    character_selection = CharacterSelector(settings)
+    character_selection.run()

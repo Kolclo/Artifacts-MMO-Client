@@ -1,0 +1,126 @@
+{
+    "button":
+    {
+        "colours":
+         {
+             "normal_border": "#00000000",
+             "hovered_border": "#00000000",
+             "normal_bg": "#00000000",
+             "hovered_bg": "#00000000",
+             "selected_bg": "#00000000",
+             "disabled_bg": "#00000000",
+             "active_bg": "#00000000",
+             "normal_text": "White",
+             "hovered_text": "White"
+        },
+        "misc":
+        {
+            "shape": "rectangle",
+            "border_width": "0",
+            "shadow_width": "0",
+            "state_transitions":
+             {
+                 "normal_hovered": "0.2",
+                 "hovered_normal": "0.2"
+             }
+        },
+        "font":
+        {
+            "name": "Macondo-Regular",
+            "size": "56",
+            "regular_path": "Artifacts_MMO_Client/resources/window/Macondo-Regular.ttf"
+        }
+    },
+     "label":
+     {
+         "colours":
+         {
+             "normal_text": "#ffffff",
+             "text_shadow": "#505050"
+         },
+         "font":
+         {
+            "name": "Macondo-Regular",
+            "size": "40",
+            "regular_path": "Artifacts_MMO_Client/resources/window/Macondo-Regular.ttf"
+        },
+         "misc":
+         {
+             "text_shadow": "1",
+             "text_shadow_size": "1",
+             "text_shadow_offset": "0,0"
+         }
+    },
+     "window":
+    {
+        "colours":
+        {
+            "dark_bg":"#21282DAA"
+        },
+        "misc":
+        {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "30",
+            "border_width": "0",
+            "title_bar_height": "0",
+            "enable_close_button": "0"
+        }
+   },
+   "window.#title_bar":
+   {
+        "misc":
+        {
+            "text_horiz_alignment": "center",
+            "border_width": "0",
+            "shadow_width": "0"
+        },
+        "colours":
+        {
+            "dark_bg":"#00000000",
+            "normal_border": "#00000000",
+            "normal_bg": "#00000000"
+        }
+    },
+    "panel":
+    {
+        "colours":
+        {
+            "dark_bg":"#00000000",
+            "normal_border": "#99999955"
+        },
+        "misc":
+        {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "10",
+            "border_width": "3",
+            "shadow_width": "0"
+        }
+    },
+    "text_box":
+    {
+        "colours":
+        {
+            "normal_text": "White",
+            "hovered_text": "White",
+            "dark_bg":"#00000000",
+            "normal_border": "#00000000"
+        },
+        "font":
+         {
+            "name": "Macondo-Regular",
+            "size": "60",
+            "regular_path": "Artifacts_MMO_Client/resources/window/Macondo-Regular.ttf"
+        },
+        "misc":
+        {
+            "border_width": "1",
+            "padding": "10,10",
+            "link_normal_underline": "0",
+            "link_hover_underline": "1",
+            "line_spacing": "1.0",
+            "shadow_width": "0",
+            "text_horiz_alignment": "center",
+            "text_vert_alignment": "center"
+        }
+    }
+}
