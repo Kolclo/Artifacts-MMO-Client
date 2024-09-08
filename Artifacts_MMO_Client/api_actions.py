@@ -215,10 +215,13 @@ class Post:
         """
         data: dict[str, int] = {"x": position_x, "y": position_y}
         response: dict[str, dict[str, str | int | list[dict[str, str | int]]]] = self.send_request.post(f"/my/{character_name}/action/move", data)
-        character_data: dict = response["data"]["character"]
-        character: Character = Character(character_data)
-        self.game_state.character_data = character
-        return character
+        try:
+            character_data: dict = response["data"]["character"]
+            character: Character = Character(character_data)
+            self.game_state.character_data = character
+            return character
+        except KeyError:
+            return False
     
     def fight(self, character_name: str) -> Character:
         """Engage in combat with the current monster the character is at.

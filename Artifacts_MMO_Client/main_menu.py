@@ -5,7 +5,7 @@ from options_menu import OptionsMenu
 from data.options import Options
 
 class MainMenu:
-    def __init__(self, volume_settings):
+    def __init__(self, settings):
         self.pygame_utils: PygameUtils = PygameUtils()
         self.WINDOW_WIDTH, self.WINDOW_HEIGHT = 1024, 1024
         self.WHITE: tuple[int, int, int] = (255, 255, 255)
@@ -26,7 +26,7 @@ class MainMenu:
 
         self.button_sound: str = "Artifacts_MMO_Client/resources/music/button_press.wav"
 
-        self.volume_settings: Options = volume_settings
+        self.settings: Options = settings
         
     
     def center_ui_element(self, width, height, y_offset = 0):
@@ -39,7 +39,7 @@ class MainMenu:
         self.play_button = pygame_gui.elements.UIButton(relative_rect=self.center_ui_element(400, 100, 50), text='Play', manager=self.gui_manager)
         self.options_button = pygame_gui.elements.UIButton(relative_rect=self.center_ui_element(400, 100, -125), text='Options', manager=self.gui_manager)
         self.exit_button = pygame_gui.elements.UIButton(relative_rect=self.center_ui_element(400, 100, -300), text='Exit', manager=self.gui_manager)
-        self.pygame_music = self.pygame_utils.play_music(self.music, self.volume_settings.music_volume)
+        self.pygame_music = self.pygame_utils.play_music(self.music, self.settings.music_volume)
 
     def run(self):
         self.setup()
@@ -53,14 +53,14 @@ class MainMenu:
                     running = False
                 
                 if event.type == pygame_gui.UI_BUTTON_PRESSED:
-                    self.pygame_utils.play_music(self.button_sound, self.volume_settings.sound_volume, 0)
+                    self.pygame_utils.play_music(self.button_sound, self.settings.sound_volume, 0)
                     if event.ui_element == self.play_button:
                         pygame.time.wait(500)
                         running = False
                     if event.ui_element == self.options_button:
-                        self.options_menu: OptionsMenu = OptionsMenu(self.window, self.volume_settings)
+                        self.options_menu: OptionsMenu = OptionsMenu(self.window, self.settings)
                         self.options_menu.run()
-                        self.pygame_music.set_volume(self.volume_settings.music_volume)
+                        self.pygame_music.set_volume(self.settings.music_volume)
                     if event.ui_element == self.exit_button:
                         pygame.time.wait(500)
                         return False
@@ -76,6 +76,6 @@ class MainMenu:
         return True
 
 if __name__ == "__main__":
-    volume_settings: Options = Options()
-    main = MainMenu(volume_settings)
+    settings: Options = Options()
+    main = MainMenu(settings)
     main.run()

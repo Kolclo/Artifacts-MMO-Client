@@ -23,10 +23,10 @@ def main() -> None:
     get_request.server_status()
 
     # Loads user options
-    volume_settings: Options = Options()
+    settings: Options = Options()
 
     # Initiates main menu
-    main_menu: MainMenu = MainMenu(volume_settings)
+    main_menu: MainMenu = MainMenu(settings)
     continue_game = main_menu.run()
     if not continue_game:
         sys.exit()
@@ -38,11 +38,11 @@ def main() -> None:
     # Gets chosen character's current tile data
     map_data_request: Map = get_request.map(selected_character.x, selected_character.y)
 
-    # Get data about characters current location
+    # Stores data
     game_data: GameState = GameState(selected_character, map_data_request)
 
     if selected_character:
-        game: Game = Game(game_data, volume_settings)
+        game: Game = Game(game_data, settings)
         game.run()
 
         sys.exit()

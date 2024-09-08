@@ -19,7 +19,6 @@ class CharacterSelector:
         self.window_name: str = "ArtifactsMMO - Character Selection"
         self.window = PygameUtils.pygame_init(self.WINDOW_WIDTH, self.WINDOW_HEIGHT, self.window_name, self.icon)
         self.font: pygame.font.Font = pygame.font.Font(self.FONT_MACONDO_LOCATION, self.FONT_SIZE)
-        self.music: str = "Artifacts_MMO_Client/resources/music/character_selection2.wav"
 
         self.background_image: str = "Artifacts_MMO_Client/resources/window/character_selection.png"
         self.background_x: int = 0

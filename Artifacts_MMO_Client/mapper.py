@@ -10,13 +10,16 @@ from event_handler import EventHandler
 from data.options import Options
 
 class CharacterSprite:
-    def __init__(self, game_state) -> None:
+    def __init__(self, game_state, tile_size) -> None:
         self.game_state = game_state
         self.x: int = self.game_state.character_data.x + 5
         self.y: int = self.game_state.character_data.y + 5
         self.skin: str = self.game_state.character_data.skin
         self.sprite: pygame.surface.Surface = pygame.image.load(f"Artifacts_MMO_Client/resources/characters/{self.skin}.png")
-        self.sprite = pygame.transform.scale(self.sprite, (40, 50))
+        self.sprite = pygame.transform.scale(self.sprite, (30, 40))
+        self.offset_x = (50 - self.sprite.get_width()) // 2
+        self.offset_y = (50 - self.sprite.get_height()) // 2
+        self.tile_size = tile_size
 
     def draw(self, window: pygame.surface.Surface) -> None:
         """Draws the character sprite on the given window at the correct position.
@@ -24,29 +27,25 @@ class CharacterSprite:
         This function first calculates the offset needed to center the sprite on the tile.
         Then it draws the sprite at the correct position using the offset.
         """
-        offset_x = (65 - self.sprite.get_width()) // 2
-        offset_y = (65 - self.sprite.get_height()) // 2
-
-        window.blit(self.sprite, (self.x * 65 + offset_x, self.y * 65 + offset_y))
+        window.blit(self.sprite, (self.x * self.tile_size + self.offset_x, self.y * self.tile_size + self.offset_y))
 
 class Game:
-    def __init__(self, game_state, volume_settings):
+    def __init__(self, game_state, settings):
         self.map_tile_length: int = 17
         self.map_tile_height: int = 21
-        self.tile_size: int = 65
+        self.tile_size: int = 50
         self.window_width: int = self.map_tile_length * self.tile_size
         self.window_height: int = self.map_tile_height * self.tile_size
         self.pygame_utils: PygameUtils = PygameUtils()
         self.game_state: GameState = game_state
-        self.character_sprite: CharacterSprite = CharacterSprite(game_state)
+        self.character_sprite: CharacterSprite = CharacterSprite(game_state, self.tile_size)
         self.character_name: str = self.game_state.character_data.name
         self.controller: CharacterController = CharacterController(game_state)
         self.get_request = Get()
         self.event_handler: EventHandler = EventHandler(self.game_state)
         self.icon: pygame.Surface = pygame.image.load("Artifacts_MMO_Client/resources/window/icon1.png")
         self.music: str = "Artifacts_MMO_Client/resources/music/mapper1.wav"
-
-        self.volume_settings: Options = volume_settings
+        self.settings: Options = settings
 
     def load_images(self, data: list[dict[str, str | int]]) -> dict:
         """Loads and scales each tiles resources
@@ -130,7 +129,7 @@ class Game:
         map_data: list[dict[str, str | int]] = self.get_request.all_maps()
 
         self.window = PygameUtils.pygame_init(self.window_width, self.window_height, "ArtifactsMMO - World", self.icon)
-        self.pygame_utils.play_music(self.music, self.volume_settings.music_volume)
+        self.pygame_utils.play_music(self.music, self.settings.music_volume)
 
         self.images: dict = self.load_images(map_data)
         self.grid: list = self.create_grid(self.map_tile_length, self.map_tile_height)
