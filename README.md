@@ -111,6 +111,10 @@ Improve performance of client
 - [ ] Multithreading?
 - [ ] Option to play exclusively via terminal?
 
+### Options
+- [ ] Add control binding to options
+- [ ] Add "first time launch" data to options to enable startup tutorial?
+
 
 ### Character Selection
 Prompt user to select a character to control

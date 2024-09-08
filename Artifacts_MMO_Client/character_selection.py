@@ -10,7 +10,7 @@ from data.character import Character
 class CharacterSelector:
     def __init__(self):
         self.pygame_utils: PygameUtils = PygameUtils()
-        self.WINDOW_WIDTH, self.WINDOW_HEIGHT = 1200, 1200
+        self.WINDOW_WIDTH, self.WINDOW_HEIGHT = 1024, 1024
         self.WHITE: tuple[int, int, int] = (255, 255, 255)
         self.BLACK: tuple[int, int, int] = (0, 0, 0)
         self.FONT_SIZE: int = 48
@@ -112,9 +112,9 @@ class CharacterSelector:
 
             # Check if the background has scrolled two screens
             if self.background_y < -self.WINDOW_HEIGHT * 2:
-                self.background_y = -600  # Reset y-position
+                self.background_y = -self.WINDOW_HEIGHT/2  # Reset y-position
             if self.background_x < -self.WINDOW_WIDTH * 2:
-                self.background_x = -600  # Reset x-position
+                self.background_x = -self.WINDOW_WIDTH/2  # Reset x-position
 
             # Draw the character buttons
             for i, (button, image, image_rect, scale, velocity) in enumerate(zip(self.buttons, self.images, self.image_rects, self.scales, self.velocities)):
