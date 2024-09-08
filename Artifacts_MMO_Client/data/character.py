@@ -107,5 +107,5 @@ class Character:
             int: The number of seconds until the cooldown expires.
         """
         current_time = datetime.now(timezone.utc)
-        cooldown_diff = (self.cooldown_expiration - current_time).total_seconds()
+        cooldown_diff = (self.cooldown_expiration - current_time).total_seconds() + 1.2
         return cooldown_diff
