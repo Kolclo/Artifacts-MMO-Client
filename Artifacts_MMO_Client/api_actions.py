@@ -80,8 +80,8 @@ class Get:
         Returns:
             Server status (dict[str, str | int]): Server status data
         """
-        status: dict[str, str | int] = self.send_request.get("/")
         try:
+            status: dict[str, str | int] = self.send_request.get("/")
             print(status)
             if not status["data"]["status"] == "online":
                 print("Server is offline. Please try again later.")
