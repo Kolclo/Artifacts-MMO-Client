@@ -30,9 +30,17 @@ class OptionsMenu:
         return pygame.Rect((x, y - y_offset), (width, height))
     
     def write_settings(self):
+        with open("Artifacts_MMO_Client/saved_user_options.py", "r") as file:
+            lines = file.readlines()
+
+        for i, line in enumerate(lines):
+            if line.startswith("music_volume"):
+                lines[i] = f"music_volume = {self.settings.music_volume}\n"
+            elif line.startswith("sound_volume"):
+                lines[i] = f"sound_volume = {self.settings.sound_volume}\n"
+
         with open("Artifacts_MMO_Client/saved_user_options.py", "w") as file:
-            file.write(f"music_volume = {self.settings.music_volume}\n")
-            file.write(f"sound_volume = {self.settings.sound_volume}\n")
+            file.writelines(lines)
 
     def setup(self):
         self.game_title = pygame_gui.elements.UIImage(relative_rect=self.center_ui_element(800, 150, 300), image_surface=self.menu_title_surface, manager=self.gui_manager)
