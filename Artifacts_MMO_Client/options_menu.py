@@ -2,6 +2,7 @@ import pygame
 from pygame_util import PygameUtils
 import pygame_gui
 from data.options import Options
+import sys
 
 class OptionsMenu:
     def __init__(self, window, settings):
@@ -38,6 +39,18 @@ class OptionsMenu:
                 lines[i] = f"music_volume = {self.settings.music_volume}\n"
             elif line.startswith("sound_volume"):
                 lines[i] = f"sound_volume = {self.settings.sound_volume}\n"
+            elif line.startswith("up_control"):
+                lines[i] = f"up_control = {self.settings.up_control}\n"
+            elif line.startswith("down_control"):
+                lines[i] = f"down_control = {self.settings.down_control}\n"
+            elif line.startswith("left_control"):
+                lines[i] = f"left_control = {self.settings.left_control}\n"
+            elif line.startswith("right_control"):
+                lines[i] = f"right_control = {self.settings.right_control}\n"
+            elif line.startswith("action_control"):
+                lines[i] = f"action_control = {self.settings.action_control}\n"
+            elif line.startswith("weapon_equip_control"):
+                lines[i] = f"weapon_equip_control = {self.settings.weapon_equip_control}\n"
 
         with open("Artifacts_MMO_Client/saved_user_options.py", "w") as file:
             file.writelines(lines)
@@ -62,7 +75,7 @@ class OptionsMenu:
             time_delta = clock.tick(60)/1000.0
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False
+                    sys.exit()
                 
                 if event.type == pygame_gui.UI_HORIZONTAL_SLIDER_MOVED:
                     if event.ui_element == self.sound_volume_slider:

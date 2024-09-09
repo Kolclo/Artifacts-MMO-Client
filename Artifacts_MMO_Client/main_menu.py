@@ -50,7 +50,7 @@ class MainMenu:
             time_delta = clock.tick(60)/1000.0
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False
+                    return False
                 
                 if event.type == pygame_gui.UI_BUTTON_PRESSED:
                     self.pygame_utils.play_music(self.button_sound, self.settings.sound_volume, 0)
