@@ -3,9 +3,10 @@ from controller import CharacterController
 from game_state import GameState
 
 class EventHandler:
-    def __init__(self, game_state):
+    def __init__(self, game_state, settings):
         self.controller: CharacterController = CharacterController(game_state)
         self.game_state: GameState = game_state
+        self.settings = settings
         # self.move_up: int = 0
         # self.move_down: int = 0
         # self.move_left: int = 0
@@ -25,17 +26,17 @@ class EventHandler:
                 return False
             elif event.type == pygame.KEYDOWN:
                 if self.game_state.character_data.is_cooldown_active() < 0:
-                    if event.key == pygame.K_LEFT:
+                    if event.key == self.settings.left_control:
                         self.controller.move_left()
-                    elif event.key == pygame.K_RIGHT:
+                    elif event.key == self.settings.right_control:
                         self.controller.move_right()
-                    elif event.key == pygame.K_UP:
+                    elif event.key == self.settings.up_control:
                         self.controller.move_up()
-                    elif event.key == pygame.K_DOWN:
+                    elif event.key == self.settings.down_control:
                         self.controller.move_down()
-                    elif event.key == pygame.K_SPACE:
+                    elif event.key == self.settings.action_control:
                         self.controller.perform_action()
-                    elif event.key == pygame.K_w:
+                    elif event.key == self.settings.weapon_equip_control:
                         self.controller.unequip("weapon")
                     
                     pygame.display.flip()

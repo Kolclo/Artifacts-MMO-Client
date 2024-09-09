@@ -42,10 +42,10 @@ class Game:
         self.character_name: str = self.game_state.character_data.name
         self.controller: CharacterController = CharacterController(game_state)
         self.get_request = Get()
-        self.event_handler: EventHandler = EventHandler(self.game_state)
+        self.settings: Options = settings
+        self.event_handler: EventHandler = EventHandler(self.game_state, self.settings)
         self.icon: pygame.Surface = pygame.image.load("Artifacts_MMO_Client/resources/window/icon1.png")
         self.music: str = "Artifacts_MMO_Client/resources/music/mapper1.wav"
-        self.settings: Options = settings
 
     def load_images(self, data: list[dict[str, str | int]]) -> dict:
         """Loads and scales each tiles resources
