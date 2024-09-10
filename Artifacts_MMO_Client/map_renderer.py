@@ -34,7 +34,7 @@ class Game:
         self.map_tile_length: int = 17
         self.map_tile_height: int = 21
         self.tile_size: int = 50
-        self.window_width: int = self.map_tile_length * self.tile_size
+        self.window_width: int = self.map_tile_length * self.tile_size + 200 # 100px added for GUI sidebar
         self.window_height: int = self.map_tile_height * self.tile_size
         self.pygame_utils: PygameUtils = PygameUtils()
         self.game_state: GameState = game_state
@@ -46,6 +46,7 @@ class Game:
         self.event_handler: EventHandler = EventHandler(self.game_state, self.settings)
         self.icon: pygame.Surface = pygame.image.load("Artifacts_MMO_Client/resources/window/icon1.png")
         self.music: str = "Artifacts_MMO_Client/resources/music/mapper1.wav"
+        self.button_sound: str = "Artifacts_MMO_Client/resources/music/button_press.wav"
 
     def load_images(self, data: list[dict[str, str | int]]) -> dict:
         """Loads and scales each tiles resources

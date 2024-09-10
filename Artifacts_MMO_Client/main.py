@@ -2,7 +2,7 @@ from main_menu import MainMenu
 from character_selection import CharacterSelector
 from data.character import Character
 from data.map import Map
-from mapper import Game
+from map_renderer import Game
 from api_actions import Get
 from game_state import GameState
 from data.options import Options
