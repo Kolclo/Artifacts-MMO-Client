@@ -8,6 +8,7 @@ from game_state import GameState
 from pygame_util import PygameUtils
 from event_handler import EventHandler
 from data.options import Options
+from data.map import Map
 
 class CharacterSprite:
     def __init__(self, game_state, tile_size) -> None:
@@ -21,13 +22,13 @@ class CharacterSprite:
         self.offset_y = (50 - self.sprite.get_height()) // 2
         self.tile_size = tile_size
 
-    def draw(self, window: pygame.surface.Surface) -> None:
+    def draw(self, surface: pygame.surface.Surface) -> None:
         """Draws the character sprite on the given window at the correct position.
 
         This function first calculates the offset needed to center the sprite on the tile.
         Then it draws the sprite at the correct position using the offset.
         """
-        window.blit(self.sprite, (self.x * self.tile_size + self.offset_x, self.y * self.tile_size + self.offset_y))
+        surface.blit(self.sprite, (self.x * self.tile_size + self.offset_x, self.y * self.tile_size + self.offset_y))
 
 class Game:
     def __init__(self, game_state, settings):
@@ -112,13 +113,13 @@ class Game:
         Args:
             grid (list): A 2D grid of size width x height, filled with None values
         """
-        self.window.fill((0, 0, 0))
+        self.map_surface.fill((0, 0, 0))
         for y, row in enumerate(grid):
             for x, image in enumerate(row):
                 if image:
-                    self.window.blit(image, (x * self.tile_size, y * self.tile_size))
+                    self.map_surface.blit(image, (x * self.tile_size, y * self.tile_size))
         # Draws character on top of grid
-        self.character_sprite.draw(self.window)
+        self.character_sprite.draw(self.map_surface)
 
     def setup(self) -> None:
         """Main game loop.
@@ -129,7 +130,8 @@ class Game:
         """
         map_data: list[dict[str, str | int]] = self.get_request.all_maps()
 
-        self.window = PygameUtils.pygame_init(self.window_width, self.window_height, "ArtifactsMMO - World", self.icon)
+        self.map_surface: pygame.surface.Surface = PygameUtils.pygame_init(self.window_width, self.window_height, "ArtifactsMMO - World", self.icon)
+        self.gui_surface: pygame.surface.Surface = pygame.Surface((200, self.window_height))
         self.pygame_utils.play_music(self.music, self.settings.music_volume)
 
         self.images: dict = self.load_images(map_data)
@@ -166,5 +168,8 @@ class Game:
 if __name__ == "__main__":
     get_request: Get = Get()
     character_data = get_request.character("Kieran")
-    game: Game = Game(character_data)
+    settings: Options = Options()
+    map_data_request: Map = get_request.map(character_data.x, character_data.y)
+    game_data: GameState = GameState(character_data, map_data_request)
+    game: Game = Game(game_data, settings)
     game.run()
