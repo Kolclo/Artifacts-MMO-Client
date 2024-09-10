@@ -182,6 +182,22 @@ class Get:
         response: dict[str, str | int | list[dict[str, str | int]]] = self.send_request.get(f"/characters/{character_name}", params={"name": {character_name}})
         self.__error_handler(response, NoCharactersExistError)
         return Character(response["data"])
+    
+    def all_exchange_items(self) -> list[dict[str, str | int]]:
+        """Get all available exchange items from the API.
+        
+        Returns:
+            Data (list[dict[str, str | int]]): List of all exchange data
+        """
+        data = []
+        page = 1
+        while True:
+            response = self.send_request.get("ge", params={"size": 100, "page": page})
+            if not response["data"]:
+                break
+            data.extend(response["data"])
+            page += 1
+        return data
 
 class Post:
     def __init__(self, game_state, request_client: SendRequest = SendRequest()) -> None:

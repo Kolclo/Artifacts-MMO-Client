@@ -5,9 +5,9 @@ music_volume = 0.1
 sound_volume = 0.8
 
 # Controls
-up_control = K_LEFT
-down_control = K_DOWN
-left_control = K_LEFT
-right_control = K_RIGHT
-action_control = K_SPACE
-weapon_equip_control = K_w
+up_control = 1073741906
+down_control = 1073741905
+left_control = 1073741904
+right_control = 1073741903
+action_control = 32
+weapon_equip_control = 119
