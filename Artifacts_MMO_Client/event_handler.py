@@ -1,12 +1,15 @@
 import pygame
 from controller import CharacterController
 from game_state import GameState
+import pygame_gui
+from pygame_util import PygameUtils
 
 class EventHandler:
-    def __init__(self, game_state, settings):
+    def __init__(self, game_state, settings, gui_manager) -> None:
         self.controller: CharacterController = CharacterController(game_state)
         self.game_state: GameState = game_state
         self.settings = settings
+        self.gui_manager: pygame_gui.UIManager = gui_manager
         # self.move_up: int = 0
         # self.move_down: int = 0
         # self.move_left: int = 0
@@ -41,8 +44,12 @@ class EventHandler:
                     
                     pygame.display.flip()
                     return "Update render"
-
                 else:
                     print(f"Unable to perform action, character in cooldown for {self.game_state.character_data.is_cooldown_active()}s")
+
+            if event.type == pygame_gui.UI_BUTTON_PRESSED:
+                print("Hi")
+
+            self.gui_manager.process_events(event)
 
         return True

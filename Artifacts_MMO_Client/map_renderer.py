@@ -9,6 +9,7 @@ from pygame_util import PygameUtils
 from event_handler import EventHandler
 from data.options import Options
 from data.map import Map
+import pygame_gui
 
 class CharacterSprite:
     def __init__(self, game_state, tile_size) -> None:
@@ -35,7 +36,7 @@ class Game:
         self.map_tile_length: int = 17
         self.map_tile_height: int = 21
         self.tile_size: int = 50
-        self.window_width: int = self.map_tile_length * self.tile_size + 200 # 100px added for GUI sidebar
+        self.window_width: int = self.map_tile_length * self.tile_size + 200 # 200px added for GUI sidebar
         self.window_height: int = self.map_tile_height * self.tile_size
         self.pygame_utils: PygameUtils = PygameUtils()
         self.game_state: GameState = game_state
@@ -44,7 +45,6 @@ class Game:
         self.controller: CharacterController = CharacterController(game_state)
         self.get_request = Get()
         self.settings: Options = settings
-        self.event_handler: EventHandler = EventHandler(self.game_state, self.settings)
         self.icon: pygame.Surface = pygame.image.load("Artifacts_MMO_Client/resources/window/icon1.png")
         self.music: str = "Artifacts_MMO_Client/resources/music/mapper1.wav"
         self.button_sound: str = "Artifacts_MMO_Client/resources/music/button_press.wav"
@@ -120,6 +120,13 @@ class Game:
                     self.map_surface.blit(image, (x * self.tile_size, y * self.tile_size))
         # Draws character on top of grid
         self.character_sprite.draw(self.map_surface)
+    
+    def load_gui(self):
+        self.button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((-self.window_width, 0), (200, self.window_height)),
+                            manager=self.gui_manager,
+                            text="A Button",
+                            container=None,
+                            anchors={"right": "right", "top": "top"})
 
     def setup(self) -> None:
         """Main game loop.
@@ -131,12 +138,18 @@ class Game:
         map_data: list[dict[str, str | int]] = self.get_request.all_maps()
 
         self.map_surface: pygame.surface.Surface = PygameUtils.pygame_init(self.window_width, self.window_height, "ArtifactsMMO - World", self.icon)
-        self.gui_surface: pygame.surface.Surface = pygame.Surface((200, self.window_height))
+        self.gui_surface: pygame.surface.Surface = pygame.Surface((self.window_width, self.window_height))
         self.pygame_utils.play_music(self.music, self.settings.music_volume)
+
+        self.gui_styles = "Artifacts_MMO_Client/resources/window/map_gui.json"
+        self.gui_manager: pygame_gui.UIManager = pygame_gui.UIManager((self.window_width, self.window_height), self.gui_styles)
+        self.event_handler: EventHandler = EventHandler(self.game_state, self.settings, self.gui_manager)
 
         self.images: dict = self.load_images(map_data)
         self.grid: list = self.create_grid(self.map_tile_length, self.map_tile_height)
         self.map_tiles_to_images(map_data, self.images, self.grid)
+
+        self.load_gui()
     
     def update_render(self) -> None:
         self.character_sprite.x, self.character_sprite.y = self.game_state.character_data.x + 5, self.game_state.character_data.y + 5
@@ -150,8 +163,11 @@ class Game:
         self.update_render()
 
         # Gameplay loop
+        clock = pygame.time.Clock()
         running: bool = True
         while running:
+            time_delta = clock.tick(60)/1000.0
+            
             # Checks for events
             event_handling = self.event_handler.handle_events()
 
@@ -161,8 +177,13 @@ class Game:
             else:
                 # Stops the loop and closes the window when event handler returns False
                 running = event_handling
+            
+            self.gui_manager.update(time_delta)
+            self.gui_manager.draw_ui(self.gui_surface)
+
+            self.map_surface.blit(self.gui_surface, (self.window_width - 200, 0))
+
             pygame.display.flip()
-            pygame.time.Clock().tick(60)
         pygame.quit()
 
 if __name__ == "__main__":
