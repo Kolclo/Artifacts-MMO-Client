@@ -126,3 +126,4 @@ Prompt user to select a character to control
 - [x] Allow for character selection
 
 make a battle simulator - use rock music - shows the player beating or dying to the enemy monster
+easy automated script to trade between two characters (movement, location checks, trading itself)
