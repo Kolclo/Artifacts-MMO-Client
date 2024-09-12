@@ -31,8 +31,11 @@ class Automation:
 
         while x < loops:
             for controller in self.controllers:
-                controller.perform_action()
-                # controller.move_up()
+                try:
+                    controller.perform_action()
+                    # controller.move_right()
+                except:
+                    print("Error performing action")
             x =+ 1
             if loops == x:
                 sys.exit()

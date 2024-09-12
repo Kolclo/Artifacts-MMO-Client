@@ -182,16 +182,16 @@ class CharacterController:
         tile_type = self.game_state.tile_data.content.type
         if tile_type == "monster":
             response = self.post_request.fight(self.character_name)
-            print(f"Character attacked monster")
+            print(f"{self.character_name} attacked monster")
             self.game_state.character_data = response
             return response
         elif tile_type == "resource":
             response = self.post_request.gather(self.character_name)
-            print(f"Character gathered resource")
+            print(f"{self.character_name} gathered resource")
             self.game_state.character_data = response
             return response
     
     def unequip(self, slot: str):
         response = self.post_request.unequip(self.character_name, slot)
-        print(f"Character unequipped {slot}")
+        print(f"{self.character_name} unequipped {slot}")
         return response
