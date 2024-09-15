@@ -198,6 +198,14 @@ class Get:
             data.extend(response["data"])
             page += 1
         return data
+    
+    def item_price(self, item_code) -> list[dict[str, str | int]]:
+        response = self.send_request.get(f"/ge/{item_code}")
+        try:
+            stock_data: dict = response["data"]
+            return stock_data
+        except KeyError:
+            return False
 
 class Post:
     def __init__(self, game_state, request_client: SendRequest = SendRequest()) -> None:
@@ -269,16 +277,16 @@ class Post:
         character: Character = Character(character_data)
         return character
 
-    def craft(self):
-        # /my/{name}/action/crafting
-        # Must be on a workshop tile
-
-        # {
-        # "code": "string",
-        # "quantity": 1
-        # }
-
-        pass
+    def craft(self, character_name, item_code, quantity):
+        data: dict[str, int] = {"code": item_code, "quantity": quantity}
+        response: dict[str, dict[str, str | int | list[dict[str, str | int]]]] = self.send_request.post(f"/my/{character_name}/action/crafting", data)
+        try:
+            character_data: dict = response["data"]["character"]
+            character: Character = Character(character_data)
+            self.game_state.character_data = character
+            return character
+        except KeyError:
+            return False
 
     def equip(self):
         # /my/{name}/action/equip
@@ -410,15 +418,16 @@ class Post:
         # }
         pass
 
-    def sell_item(self):
-        # /my/{name}/action/ge/buy
-
-        # {
-        # "code": "string",
-        # "quantity": 1,
-        # "price": 1
-        # }
-        pass
+    def sell_item(self, character_name, item_code, price, quantity):
+        data: dict[str, int] = {"code": item_code, "quantity": quantity, "price": price}
+        response: dict[str, dict[str, str | int | list[dict[str, str | int]]]] = self.send_request.post(f"/my/{character_name}/action/ge/sell", data)
+        try:
+            character_data: dict = response["data"]["character"]
+            character: Character = Character(character_data)
+            self.game_state.character_data = character
+            return character
+        except KeyError:
+            return False
 
 
 

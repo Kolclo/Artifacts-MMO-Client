@@ -195,3 +195,13 @@ class CharacterController:
         response = self.post_request.unequip(self.character_name, slot)
         print(f"{self.character_name} unequipped {slot}")
         return response
+    
+    def craft_item(self, item_code: str, quantity: int = 1):
+        response = self.post_request.craft(self.character_name, item_code, quantity)
+        print(f"{self.character_name} crafted {item_code}")
+        return response
+    
+    def sell_item(self, item_code: str, price: int, quantity: int = 1):
+        response = self.post_request.sell_item(self.character_name, item_code, price, quantity)
+        print(f"{self.character_name} sold {item_code}")
+        return response
